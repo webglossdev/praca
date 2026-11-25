@@ -8,7 +8,7 @@
 
 ## 1. Estado atual (reescrever a cada sessão; máx. ~15 linhas)
 
-- **Fase:** preparação pública do repositório em andamento; dados reais, documentação jurídica e workflow GitHub Pages estão preparados, aguardando autenticação remota.
+- **Fase:** preparação pública concluída localmente; primeiro commit criado, remoto configurado e push bloqueado por ausência de repositório/autenticação no GitHub.
 - **Funciona hoje:** Câmara 513 deputados e Senado 81 senadores ativos em `data/publico/pessoas.json`; 166 notícias normalizadas; `npm run check` sem diagnósticos; build público com 1.402 páginas; Pagefind indexou 1.402 páginas; Vitest 3/3 e Playwright/axe 4/4.
 - **Melhorias desta sessão:** skip link e menu móvel, estados dinâmicos com `aria-live`, filtros preservados na URL, semântica de tabela corrigida, tooltip/estado de compartilhamento tratado, partido neutro em relação aos Poderes, fontes Fraunces/Instrument Sans/JetBrains Mono instaladas como Fontsource e gerenciador Node padronizado em npm.
 - **Em andamento / pendente externo:** conexão de chaves de produção (`CGU_API_KEY`, `DATAJUD_API_KEY`), ingestão em lote de CSVs completos do TSE/Receita (~1,6 GB) em Parquet/DuckDB, revisão jurídica (`PLANO.md §7.6`) para desbloqueio de `SECOES_SENSIVEIS_ATIVAS`, validação com pesquisador externo (`§8.7`), Pagefind/Playwright/axe E2E e deploy no Cloudflare Pages + GitHub remoto.
@@ -95,6 +95,16 @@ Modelo de entrada:
 - **Verificação:** revisão de segurança não encontrou tokens, chaves privadas ou CPF completo rastreável; `test-results/` foi excluído. Próximo passo exige credencial GitHub CLI ou API para criar remoto e fazer push.
 - **Problemas e armadilhas:** GitHub CLI não estava instalado no PATH; também não havia credencial GitHub ou remote configurado. Publicação remota ainda depende de autenticação humana.
 - **Pendências geradas:** criar repositório remoto, configurar Pages, validar URL live, proteger branch principal e publicar o primeiro commit.
+
+### 2026-11-24: criação local e tentativa de publicação no GitHub
+- **Quem:** Coordenador Técnico Principal
+- **O que:** criado o primeiro commit local `5d765b7`, configurado o remoto `https://github.com/webglossdev/praca.git` e tentado `git push -u origin main`.
+- **Onde:** repositório Git local da raiz `D:\.exp\IDE-WEBDEV-PAGES\app`.
+- **Como:** revisão staged, varredura de padrões de token/chave privada, configuração de usuário Git local e push HTTPS.
+- **Por quê:** concluir a publicação aberta e preparar o deploy GitHub Pages.
+- **Verificação:** commit criado e diretório de trabalho limpo. O push foi rejeitado pelo GitHub com `Repository not found`, indicando repositório inexistente ou credencial sem acesso.
+- **Problemas e armadilhas:** GitHub CLI não estava disponível por PATH e não havia credencial autenticada/remote pré-configurado. Nenhum segredo foi encontrado no staged.
+- **Pendências geradas:** autenticar GitHub, criar o repositório `webglossdev/praca`, concluir o push, configurar Pages pela ação ou Settings e validar a URL pública.
 
 ### 2026-11-24: ingestão real inicial e estrutura jurídica completa
 - **Quem:** Coordenador Técnico Principal com cinco subagentes especialistas

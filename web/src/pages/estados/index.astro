@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { pessoas } from "../../data/pessoas";
+
+const porUf = new Map<string, number>();
+for (const p of pessoas) {
+  const uf = p.mandatos[0]?.uf;
+  if (uf) porUf.set(uf, (porUf.get(uf) ?? 0) + 1);
+}
+const lista = [...porUf.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+<Layout title="Estados (UF) · Praça" description="Perfis agrupados por unidade da Federação.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Agregador federativo</span>
+      <h1>Estados e UF</h1>
+      <p class="lede">Unidades federativas com representantes cadastrados na edição atual.</p>
+    </header>
+    <div class="cards">
+      {lista.map(([uf, count]) => (
+        <a class="card" data-poder="executivo" href={`/estados/${uf.toLowerCase()}`}>
+          <span class="eyebrow">Unidade federativa</span>
+          <h2>{uf}</h2>
+          <span class="mono">{count} perfil(is)</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

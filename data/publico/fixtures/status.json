@@ -1,0 +1,56 @@
+[
+  {
+    "fonte_id": "camara",
+    "nome": "Dados Abertos da Câmara",
+    "status": "ativa",
+    "ultima_coleta": "2026-10-05T12:00:00Z",
+    "latencia_ms": 420,
+    "circuit_breaker": "fechado",
+    "observacao": "Janela de votações configurada em 90 dias."
+  },
+  {
+    "fonte_id": "senado",
+    "nome": "Dados Abertos do Senado",
+    "status": "ativa",
+    "ultima_coleta": "2026-10-05T12:00:00Z",
+    "latencia_ms": 510,
+    "circuit_breaker": "fechado",
+    "observacao": "Endpoint /dadosabertos/votacao.json e CEAPS Latin-1."
+  },
+  {
+    "fonte_id": "tse",
+    "nome": "Tribunal Superior Eleitoral",
+    "status": "ativa",
+    "ultima_coleta": "2026-10-05T06:00:00Z",
+    "latencia_ms": 890,
+    "circuit_breaker": "fechado",
+    "observacao": "Lotes em CSV e pesquisas registradas."
+  },
+  {
+    "fonte_id": "cgu-transparencia",
+    "nome": "Portal da Transparência (CGU)",
+    "status": "degradada",
+    "ultima_coleta": "2026-10-04T22:00:00Z",
+    "latencia_ms": 1450,
+    "circuit_breaker": "meio_aberto",
+    "observacao": "Requer token cadastrado em ambiente de produção para emendas e CEIS/CNEP."
+  },
+  {
+    "fonte_id": "stf",
+    "nome": "STF / Corte Aberta / DataJud",
+    "status": "ativa",
+    "ultima_coleta": "2026-10-05T08:00:00Z",
+    "latencia_ms": 630,
+    "circuit_breaker": "fechado",
+    "observacao": "Pautas públicas e acervo colegiado."
+  },
+  {
+    "fonte_id": "agencia-brasil",
+    "nome": "Agência Brasil & Agências Legislativas (RSS)",
+    "status": "ativa",
+    "ultima_coleta": "2026-10-05T11:45:00Z",
+    "latencia_ms": 340,
+    "circuit_breaker": "fechado",
+    "observacao": "Feeds oficiais deduplicados por URL canônica."
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "fonte_id": "camara",
+    "nome": "Dados Abertos da Câmara",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "513 deputados coletados."
+  },
+  {
+    "fonte_id": "senado",
+    "nome": "Dados Abertos do Senado",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "81 senadores coletados."
+  },
+  {
+    "fonte_id": "cgu-transparencia",
+    "nome": "Portal da Transparência (CGU)",
+    "status": "planejada",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "CGU_API_KEY não configurada. Emendas e bases privadas não foram inventadas."
+  },
+  {
+    "fonte_id": "stf",
+    "nome": "STF / DataJud",
+    "status": "planejada",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "DATAJUD_API_KEY não configurada. Composição pública não foi estimada."
+  },
+  {
+    "fonte_id": "agencia-camara",
+    "nome": "Agência Câmara",
+    "status": "degradada",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "aberto",
+    "observacao": "Feed indisponível: Client error '404 Not Found' for url 'https://www.camara.leg.br/agencia/feeds/rss.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+  },
+  {
+    "fonte_id": "agencia-senado",
+    "nome": "Agência Senado",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "15 notícias normalizadas."
+  },
+  {
+    "fonte_id": "agencia-brasil",
+    "nome": "Agência Brasil (EBC)",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "10 notícias normalizadas."
+  },
+  {
+    "fonte_id": "stf-noticias",
+    "nome": "Notícias do STF",
+    "status": "degradada",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "aberto",
+    "observacao": "Feed indisponível: Redirect response '301 Moved Permanently' for url 'https://noticias.stf.jus.br/rss'\nRedirect location: 'https://noticias.stf.jus.br/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301"
+  },
+  {
+    "fonte_id": "tse-noticias",
+    "nome": "Notícias do TSE",
+    "status": "degradada",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "aberto",
+    "observacao": "Feed indisponível: Client error '403 Forbidden' for url 'https://www.tse.jus.br/comunicacao/noticias/rss'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+  },
+  {
+    "fonte_id": "poder360",
+    "nome": "Poder360",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "10 notícias normalizadas."
+  },
+  {
+    "fonte_id": "g1-politica",
+    "nome": "g1 Política",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "100 notícias normalizadas."
+  },
+  {
+    "fonte_id": "bbc-brasil",
+    "nome": "BBC News Brasil",
+    "status": "ativa",
+    "ultima_coleta": "2026-11-24T08:51:25.954191Z",
+    "latencia_ms": null,
+    "circuit_breaker": "fechado",
+    "observacao": "31 notícias normalizadas."
+  }
+]

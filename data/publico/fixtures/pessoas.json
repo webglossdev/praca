@@ -1,0 +1,698 @@
+[
+  {
+    "pid": "pid_fulana-de-tal-uf",
+    "nome": "Fulana de Tal",
+    "nome_publico": "Fulana",
+    "slug": "fulana-de-tal-uf",
+    "mandatos": [
+      {
+        "poder": "legislativo",
+        "cargo": "Deputada federal",
+        "uf": "UF",
+        "inicio": "2023-02-01",
+        "fim": null,
+        "status": "ativo"
+      }
+    ],
+    "partido": {
+      "sigla": "XYZ",
+      "nome": "Partido Exemplo",
+      "numero": 99,
+      "federacao": "Federação Cívica",
+      "historico_nomes": []
+    },
+    "apelidos": ["Fulana"],
+    "fontes": [
+      {
+        "valor": "Câmara dos Deputados",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    ],
+    "biografia": {
+      "valor": "Economista e deputada federal em primeiro mandato, atuante nas comissões de Educação e Finanças Públicas.",
+      "fonte_id": "camara",
+      "url": "https://dadosabertos.camara.leg.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "resumo_numeros": {
+      "presenca": {
+        "valor": "96% nas sessões deliberativas (2026)",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "proposicoes": {
+        "valor": "18 proposições autorais",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "cota_acumulada": {
+        "valor": "R$ 148.200,00 em 2026",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "emendas_empenhadas": {
+        "valor": "R$ 4.200.000,00 em 2026",
+        "fonte_id": "cgu-transparencia",
+        "url": "https://portaldatransparencia.gov.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "alinhamento_partidario": {
+        "valor": "84,0% com a bancada XYZ",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    "filiacoes": [
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "partido_sigla": "XYZ",
+        "inicio": "2021-03-10",
+        "fim": null,
+        "fonte": {
+          "valor": "Filiação ao XYZ",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "proposicoes": [
+      {
+        "id": "pl-2026-1042",
+        "casa": "camara",
+        "tipo": "PL",
+        "numero": 1042,
+        "ano": 2026,
+        "ementa": "Estabelece diretrizes de transparência ativa em contratações municipais com recursos federais.",
+        "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/20261042"
+      },
+      {
+        "id": "pl-2025-881",
+        "casa": "camara",
+        "tipo": "PL",
+        "numero": 881,
+        "ano": 2025,
+        "ementa": "Amplia a prestação de contas bimestral do transporte escolar interurbano.",
+        "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2025881"
+      }
+    ],
+    "votos_recentes": [
+      {
+        "votacao_id": "vot-cam-2026-01",
+        "proposicao_label": "PL 1042/2026",
+        "tema": "Transparência pública",
+        "data": "2026-10-02",
+        "escolha": "sim",
+        "orientacao_partido": "Sim",
+        "orientacao_governo": "Sim",
+        "resultado": "Aprovada (278 x 194)",
+        "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/vot-cam-2026-01"
+      },
+      {
+        "votacao_id": "vot-cam-2026-02",
+        "proposicao_label": "PLP 48/2026",
+        "tema": "Responsabilidade fiscal",
+        "data": "2026-09-18",
+        "escolha": "nao",
+        "orientacao_partido": "Não",
+        "orientacao_governo": "Sim",
+        "resultado": "Rejeitada (210 x 252)",
+        "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/vot-cam-2026-02"
+      }
+    ],
+    "despesas": [
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "categoria": "Passagens aéreas",
+        "valor": "38400.00",
+        "competencia": "2026-09-01",
+        "fonte": {
+          "valor": "38400.00",
+          "fonte_id": "camara",
+          "url": "https://dadosabertos.camara.leg.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      },
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "categoria": "Divulgação da atividade parlamentar",
+        "valor": "61800.00",
+        "competencia": "2026-09-01",
+        "fonte": {
+          "valor": "61800.00",
+          "fonte_id": "camara",
+          "url": "https://dadosabertos.camara.leg.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "emendas": [
+      {
+        "parlamentar_pid": "pid_fulana-de-tal-uf",
+        "favorecido": "Consórcio Intermunicipal de Saúde do Vale",
+        "valor_empenhado": "2400000.00",
+        "ano": 2026,
+        "fonte": {
+          "valor": "2400000.00",
+          "fonte_id": "cgu-transparencia",
+          "url": "https://portaldatransparencia.gov.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "doacoes": [
+      {
+        "candidato_pid": "pid_fulana-de-tal-uf",
+        "doador": "Direção Nacional XYZ (FEFC)",
+        "valor": "420000.00",
+        "ano_eleitoral": 2022,
+        "fonte": {
+          "valor": "420000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "bens": [
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "descricao": "Apartamento residencial declarado ao TSE",
+        "valor": "520000.00",
+        "ano_eleitoral": 2022,
+        "fonte": {
+          "valor": "520000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "sancoes_empresas": [],
+    "posicionamento": {
+      "autodeclaracao": {
+        "valor": "Centro reformista e foco em eficiência educacional",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "autodeclaração pública"
+      },
+      "alinhamento_partido_pct": 84.0,
+      "alinhamento_governo_pct": 61.5,
+      "classificacao_partido": {
+        "valor": "Bancada independente com voto programático em pautas sociais",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "nota metodológica publicada"
+      },
+      "metodologia_url": "/metodologia#posicionamento"
+    },
+    "plano_governo": null,
+    "pesquisas": [],
+    "noticias_ids": ["not-camara-2026-01", "not-imprensa-2026-02"],
+    "atribuicoes": [
+      {
+        "noticia_id": "not-imprensa-2026-02",
+        "rotulo": "Segundo a imprensa",
+        "desfecho": null,
+        "atualizado_em": "2026-10-04",
+        "status": "Em apuração preliminar reportada pelo veículo original",
+        "titulo_noticia": "Comissão analisa auditoria de convênios regionais",
+        "veiculo": "Veículo Exemplo",
+        "data": "2026-10-04",
+        "url": "https://jornal.example.org/auditoria-convenios"
+      }
+    ]
+  },
+  {
+    "pid": "pid_joao-da-silva-sp",
+    "nome": "João da Silva",
+    "nome_publico": "João da Silva",
+    "slug": "joao-da-silva-sp",
+    "mandatos": [
+      {
+        "poder": "executivo",
+        "cargo": "Governador",
+        "uf": "SP",
+        "inicio": "2023-01-01",
+        "fim": null,
+        "status": "ativo"
+      }
+    ],
+    "partido": {
+      "sigla": "ABC",
+      "nome": "Partido ABC",
+      "numero": 12,
+      "federacao": null,
+      "historico_nomes": []
+    },
+    "apelidos": [],
+    "fontes": [
+      {
+        "valor": "Tribunal Superior Eleitoral",
+        "fonte_id": "tse",
+        "url": "https://www.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    ],
+    "biografia": {
+      "valor": "Administrador público e governador do Estado de São Paulo desde janeiro de 2023.",
+      "fonte_id": "tse",
+      "url": "https://www.tse.jus.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "resumo_numeros": {
+      "mandato": {
+        "valor": "Executivo estadual (SP)",
+        "fonte_id": "tse",
+        "url": "https://www.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "bens_declarados": {
+        "valor": "R$ 1.180.000,00 (TSE 2022)",
+        "fonte_id": "tse",
+        "url": "https://dadosabertos.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    "filiacoes": [
+      {
+        "pid": "pid_joao-da-silva-sp",
+        "partido_sigla": "ABC",
+        "inicio": "2018-04-02",
+        "fim": null,
+        "fonte": {
+          "valor": "Filiação ao ABC",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "proposicoes": [],
+    "votos_recentes": [],
+    "despesas": [],
+    "emendas": [],
+    "doacoes": [
+      {
+        "candidato_pid": "pid_joao-da-silva-sp",
+        "doador": "Fundo Eleitoral ABC",
+        "valor": "3500000.00",
+        "ano_eleitoral": 2022,
+        "fonte": {
+          "valor": "3500000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "bens": [
+      {
+        "pid": "pid_joao-da-silva-sp",
+        "descricao": "Imóvel residencial e aplicações financeiras declaradas ao TSE",
+        "valor": "1180000.00",
+        "ano_eleitoral": 2022,
+        "fonte": {
+          "valor": "1180000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "sancoes_empresas": [],
+    "posicionamento": {
+      "autodeclaracao": {
+        "valor": "Programa registrado no TSE priorizando infraestrutura logística e ensino técnico",
+        "fonte_id": "tse",
+        "url": "https://divulgacandcontas.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "documento público TSE"
+      },
+      "alinhamento_partido_pct": null,
+      "alinhamento_governo_pct": null,
+      "classificacao_partido": null,
+      "metodologia_url": "/metodologia#posicionamento"
+    },
+    "plano_governo": {
+      "valor": "Diretrizes registradas no DivulgaCandContas: expansão da rede técnica estadual, digitalização de prontuários no SUS estadual e metas de desburocratização.",
+      "fonte_id": "tse",
+      "url": "https://divulgacandcontas.tse.jus.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "pesquisas": [
+      {
+        "registro_tse": "SP-04512/2026",
+        "instituto": "Instituto Referência",
+        "cargo": "Governador (SP)",
+        "data_divulgacao": "2026-09-28",
+        "margem_erro_pp": 2.2,
+        "confianca_pct": 95.0,
+        "percentual_candidato": 38.4,
+        "fonte": {
+          "valor": "Instituto Referência (SP-04512/2026)",
+          "fonte_id": "tse",
+          "url": "https://www.tse.jus.br/eleicoes/pesquisas-eleitorais",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "noticias_ids": ["not-agbrasil-2026-03"],
+    "atribuicoes": []
+  },
+  {
+    "pid": "pid_ministra-exemplo-stf",
+    "nome": "Ministra Exemplo",
+    "nome_publico": "Ministra Exemplo",
+    "slug": "ministra-exemplo-stf",
+    "mandatos": [
+      {
+        "poder": "judiciario",
+        "cargo": "Ministra do STF",
+        "uf": null,
+        "inicio": "2020-01-01",
+        "fim": null,
+        "status": "ativo"
+      }
+    ],
+    "partido": null,
+    "apelidos": [],
+    "fontes": [
+      {
+        "valor": "Supremo Tribunal Federal",
+        "fonte_id": "stf",
+        "url": "https://portal.stf.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    ],
+    "biografia": {
+      "valor": "Magistrada integrante do Supremo Tribunal Federal desde 2020, sem filiação partidária por vedação constitucional.",
+      "fonte_id": "stf",
+      "url": "https://portal.stf.jus.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "resumo_numeros": {
+      "acordaos": {
+        "valor": "Corte Aberta STF (acervo consultável)",
+        "fonte_id": "stf",
+        "url": "https://portal.stf.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    "filiacoes": [],
+    "proposicoes": [],
+    "votos_recentes": [],
+    "despesas": [],
+    "emendas": [],
+    "doacoes": [],
+    "bens": [],
+    "sancoes_empresas": [],
+    "posicionamento": null,
+    "plano_governo": null,
+    "pesquisas": [],
+    "noticias_ids": ["not-stf-2026-04"],
+    "atribuicoes": []
+  },
+  {
+    "pid": "pid_rafael-cardoso-rj",
+    "nome": "Rafael Cardoso",
+    "nome_publico": "Rafael Cardoso",
+    "slug": "rafael-cardoso-rj",
+    "mandatos": [
+      {
+        "poder": "legislativo",
+        "cargo": "Senador",
+        "uf": "RJ",
+        "inicio": "2023-02-01",
+        "fim": null,
+        "status": "ativo"
+      }
+    ],
+    "partido": {
+      "sigla": "DEF",
+      "nome": "Partido DEF",
+      "numero": 45,
+      "federacao": null,
+      "historico_nomes": []
+    },
+    "apelidos": [],
+    "fontes": [
+      {
+        "valor": "Senado Federal",
+        "fonte_id": "senado",
+        "url": "https://www12.senado.leg.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    ],
+    "biografia": {
+      "valor": "Senador pelo Rio de Janeiro na 57ª Legislatura, relator de matérias de pacto federativo e saneamento.",
+      "fonte_id": "senado",
+      "url": "https://www12.senado.leg.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "resumo_numeros": {
+      "presenca": {
+        "valor": "92% das sessões plenárias",
+        "fonte_id": "senado",
+        "url": "https://legis.senado.leg.br/dadosabertos",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "ceaps": {
+        "valor": "R$ 94.500,00 declarados na CEAPS (2026)",
+        "fonte_id": "senado",
+        "url": "https://www12.senado.leg.br/transparencia/sen/ceaps",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    "filiacoes": [
+      {
+        "pid": "pid_rafael-cardoso-rj",
+        "partido_sigla": "DEF",
+        "inicio": "2016-09-12",
+        "fim": null,
+        "fonte": {
+          "valor": "Filiação ao DEF",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "proposicoes": [
+      {
+        "id": "pec-2026-10",
+        "casa": "senado",
+        "tipo": "PEC",
+        "numero": 10,
+        "ano": 2026,
+        "ementa": "Atualiza critérios de partilha de compensações ambientais entre União, estados e municípios.",
+        "url": "https://legis.senado.leg.br/dadosabertos/materia/10"
+      }
+    ],
+    "votos_recentes": [
+      {
+        "votacao_id": "vot-sen-2026-01",
+        "proposicao_label": "PEC 10/2026",
+        "tema": "Pacto federativo",
+        "data": "2026-09-25",
+        "escolha": "sim",
+        "orientacao_partido": "Sim",
+        "orientacao_governo": "Não",
+        "resultado": "Aprovada (49 x 24)",
+        "url": "https://legis.senado.leg.br/dadosabertos/votacao.json"
+      }
+    ],
+    "despesas": [
+      {
+        "pid": "pid_rafael-cardoso-rj",
+        "categoria": "Aluguel de escritório político (CEAPS)",
+        "valor": "42000.00",
+        "competencia": "2026-09-01",
+        "fonte": {
+          "valor": "42000.00",
+          "fonte_id": "senado",
+          "url": "https://www12.senado.leg.br/transparencia/sen/ceaps",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "emendas": [
+      {
+        "parlamentar_pid": "pid_rafael-cardoso-rj",
+        "favorecido": "Hospital Universitário Fluminense",
+        "valor_empenhado": "3100000.00",
+        "ano": 2026,
+        "fonte": {
+          "valor": "3100000.00",
+          "fonte_id": "cgu-transparencia",
+          "url": "https://portaldatransparencia.gov.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "doacoes": [],
+    "bens": [],
+    "sancoes_empresas": [],
+    "posicionamento": {
+      "autodeclaracao": null,
+      "alinhamento_partido_pct": 91.0,
+      "alinhamento_governo_pct": 48.0,
+      "classificacao_partido": {
+        "valor": "Alinhado à liderança do DEF em plenário",
+        "fonte_id": "senado",
+        "url": "https://legis.senado.leg.br/dadosabertos",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      },
+      "metodologia_url": "/metodologia#posicionamento"
+    },
+    "plano_governo": null,
+    "pesquisas": [],
+    "noticias_ids": ["not-senado-2026-05"],
+    "atribuicoes": []
+  },
+  {
+    "pid": "pid_carla-mendes-mg",
+    "nome": "Carla Mendes",
+    "nome_publico": "Carla Mendes",
+    "slug": "carla-mendes-mg",
+    "mandatos": [
+      {
+        "poder": "legislativo",
+        "cargo": "Deputada federal",
+        "uf": "MG",
+        "inicio": "2027-02-01",
+        "fim": null,
+        "status": "eleito_aguardando_posse"
+      }
+    ],
+    "partido": {
+      "sigla": "GHI",
+      "nome": "Partido GHI",
+      "numero": 27,
+      "federacao": "Federação Exemplo",
+      "historico_nomes": []
+    },
+    "apelidos": ["Carla"],
+    "fontes": [
+      {
+        "valor": "Tribunal Superior Eleitoral",
+        "fonte_id": "tse",
+        "url": "https://www.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    ],
+    "biografia": {
+      "valor": "Deputada federal diplomada por Minas Gerais; assume mandato em 1º de fevereiro de 2027.",
+      "fonte_id": "tse",
+      "url": "https://dadosabertos.tse.jus.br",
+      "coletado_em": "2026-10-05T12:00:00Z",
+      "licenca": "dados públicos"
+    },
+    "resumo_numeros": {
+      "diplomacao": {
+        "valor": "Eleita em 2026 (posse em 01/02/2027)",
+        "fonte_id": "tse",
+        "url": "https://www.tse.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    "filiacoes": [
+      {
+        "pid": "pid_carla-mendes-mg",
+        "partido_sigla": "GHI",
+        "inicio": "2022-03-20",
+        "fim": null,
+        "fonte": {
+          "valor": "Filiação ao GHI",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "proposicoes": [],
+    "votos_recentes": [],
+    "despesas": [],
+    "emendas": [],
+    "doacoes": [
+      {
+        "candidato_pid": "pid_carla-mendes-mg",
+        "doador": "Direção Nacional GHI",
+        "valor": "310000.00",
+        "ano_eleitoral": 2026,
+        "fonte": {
+          "valor": "310000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "bens": [
+      {
+        "pid": "pid_carla-mendes-mg",
+        "descricao": "Casa residencial declarada no registro de candidatura",
+        "valor": "480000.00",
+        "ano_eleitoral": 2026,
+        "fonte": {
+          "valor": "480000.00",
+          "fonte_id": "tse",
+          "url": "https://dadosabertos.tse.jus.br",
+          "coletado_em": "2026-10-05T12:00:00Z",
+          "licenca": "dados públicos"
+        }
+      }
+    ],
+    "sancoes_empresas": [],
+    "posicionamento": null,
+    "plano_governo": null,
+    "pesquisas": [],
+    "noticias_ids": [],
+    "atribuicoes": []
+  }
+]

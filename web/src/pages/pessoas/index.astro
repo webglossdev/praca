@@ -1,0 +1,205 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PersonCard from "../../components/PersonCard.astro";
+import { pessoas } from "../../data/pessoas";
+
+const ufs = [...new Set(pessoas.map((p) => p.mandatos[0]?.uf).filter((uf): uf is string => Boolean(uf)))].sort();
+const cargos = [...new Set(pessoas.map((p) => p.mandatos[0]?.cargo).filter((c): c is string => Boolean(c)))].sort();
+const partidos = [...new Set(pessoas.map((p) => p.partido?.sigla).filter((s): s is string => Boolean(s)))].sort();
+const statuses = [...new Set(pessoas.map((p) => p.mandatos[0]?.status).filter((s): s is string => Boolean(s)))].sort();
+---
+<Layout title="Pessoas · Praça" description="Busque parlamentares, governadores e ministros por nome, Poder, cargo, partido, situação ou UF.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Índice de perfis</span>
+      <h1>Pessoas</h1>
+      <p class="lede">Filtre por Poder, UF, cargo, partido e situação de mandato. Pressione <span class="kbd">/</span> para focar a busca.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <div class="filter-pills" role="group" aria-label="Filtrar por Poder">
+          <button class="pill-button" type="button" data-poder-filter="" aria-pressed="true">Todos os Poderes</button>
+          <button class="pill-button" type="button" data-poder-filter="legislativo" aria-pressed="false">Legislativo</button>
+          <button class="pill-button" type="button" data-poder-filter="executivo" aria-pressed="false">Executivo</button>
+          <button class="pill-button" type="button" data-poder-filter="judiciario" aria-pressed="false">Judiciário</button>
+        </div>
+
+        <label class="sr-only" for="uf-filter">Filtrar por UF</label>
+        <select id="uf-filter" class="filter-select" data-uf-filter>
+          <option value="">Todas as UFs</option>
+          {ufs.map((uf) => <option value={uf}>{uf}</option>)}
+        </select>
+
+        <label class="sr-only" for="cargo-filter">Filtrar por cargo</label>
+        <select id="cargo-filter" class="filter-select" data-cargo-filter>
+          <option value="">Todos os cargos</option>
+          {cargos.map((cargo) => <option value={cargo}>{cargo}</option>)}
+        </select>
+
+        <label class="sr-only" for="partido-filter">Filtrar por partido</label>
+        <select id="partido-filter" class="filter-select" data-partido-filter>
+          <option value="">Todos os partidos</option>
+          {partidos.map((sigla) => <option value={sigla}>{sigla}</option>)}
+        </select>
+
+        <label class="sr-only" for="status-filter">Filtrar por situação</label>
+        <select id="status-filter" class="filter-select" data-status-filter>
+          <option value="">Todas as situações</option>
+          {statuses.map((st) => <option value={st}>{st.replaceAll("_", " ")}</option>)}
+        </select>
+
+        <label class="sr-only" for="sort-select">Ordenar por</label>
+        <select id="sort-select" class="filter-select" data-sort-select>
+          <option value="nome">Ordem: Nome (A–Z)</option>
+          <option value="poder">Ordem: Poder</option>
+          <option value="cargo">Ordem: Cargo</option>
+        </select>
+
+        <button class="pill-button" type="button" data-view-toggle aria-pressed="false" aria-label="Exibir perfis em lista">Lista</button>
+      </div>
+
+      <form class="search-form" action="/pessoas" method="get" role="search" data-live-filter>
+        <label class="sr-only" for="q">Filtrar pessoas</label>
+        <input id="q" name="q" type="search" placeholder="Nome, cargo, UF ou partido" />
+        <button class="button" type="submit">Filtrar</button>
+      </form>
+    </div>
+
+    <div class="section-heading" style="margin-bottom: var(--s-4);">
+      <p class="muted" data-people-count aria-live="polite">
+        {pessoas.length} perfil{pessoas.length === 1 ? "" : "s"} encontrado{pessoas.length === 1 ? "" : "s"}.
+      </p>
+      <a class="button secondary small" href="/comparar">Comparar perfis →</a>
+    </div>
+
+    <div class="people-grid" data-people-grid>
+      {pessoas.map((pessoa) => <PersonCard pessoa={pessoa} />)}
+    </div>
+    <p class="card" hidden data-empty>Sem dado disponível para os filtros selecionados.</p>
+  </div>
+</Layout>
+<script>
+  const grid = document.querySelector<HTMLElement>("[data-people-grid]");
+  const form = document.querySelector<HTMLFormElement>("[data-live-filter]");
+  const input = form?.querySelector<HTMLInputElement>("input[name=q]");
+  const poderButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-poder-filter]")];
+  const ufSelect = document.querySelector<HTMLSelectElement>("[data-uf-filter]");
+  const cargoSelect = document.querySelector<HTMLSelectElement>("[data-cargo-filter]");
+  const partidoSelect = document.querySelector<HTMLSelectElement>("[data-partido-filter]");
+  const statusSelect = document.querySelector<HTMLSelectElement>("[data-status-filter]");
+  const sortSelect = document.querySelector<HTMLSelectElement>("[data-sort-select]");
+  const viewToggle = document.querySelector<HTMLButtonElement>("[data-view-toggle]");
+  const cards = [...document.querySelectorAll<HTMLElement>("[data-people-grid] .person-card")];
+  const empty = document.querySelector<HTMLElement>("[data-empty]");
+  const count = document.querySelector<HTMLElement>("[data-people-count]");
+
+  const params = new URLSearchParams(window.location.search);
+  let activePoder = params.get("poder") ?? "";
+  let activeUf = (params.get("uf") ?? "").toUpperCase();
+  let activeCargo = params.get("cargo") ?? "";
+  let activePartido = (params.get("partido") ?? "").toUpperCase();
+  let activeStatus = params.get("status") ?? "";
+  let activeSort = params.get("sort") ?? "nome";
+
+  if (input && params.has("q")) input.value = params.get("q") ?? "";
+  if (ufSelect && activeUf) ufSelect.value = activeUf;
+  if (cargoSelect && activeCargo) cargoSelect.value = activeCargo;
+  if (partidoSelect && activePartido) partidoSelect.value = activePartido;
+  if (statusSelect && activeStatus) statusSelect.value = activeStatus;
+  if (sortSelect && activeSort) sortSelect.value = activeSort;
+
+  const syncButtons = () => {
+    for (const button of poderButtons) {
+      button.setAttribute("aria-pressed", String((button.dataset.poderFilter ?? "") === activePoder));
+    }
+  };
+
+  const syncUrl = (query: string) => {
+    const next = new URLSearchParams();
+    if (query) next.set("q", query);
+    if (activePoder) next.set("poder", activePoder);
+    if (activeUf) next.set("uf", activeUf);
+    if (activeCargo) next.set("cargo", activeCargo);
+    if (activePartido) next.set("partido", activePartido);
+    if (activeStatus) next.set("status", activeStatus);
+    if (activeSort !== "nome") next.set("sort", activeSort);
+    const qs = next.toString();
+    window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  };
+
+  const applySort = () => {
+    if (!grid) return;
+    const sorted = [...cards].sort((a, b) => {
+      const ka = a.dataset[activeSort as "nome" | "poder" | "cargo"] ?? "";
+      const kb = b.dataset[activeSort as "nome" | "poder" | "cargo"] ?? "";
+      return ka.localeCompare(kb, "pt-BR");
+    });
+    for (const card of sorted) grid.appendChild(card);
+  };
+
+  const applyFilter = (updateHistory = true) => {
+    applySort();
+    const query = (input?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    let visible = 0;
+
+    for (const card of cards) {
+      const ok =
+        (!activePoder || (card.dataset.poder ?? "") === activePoder) &&
+        (!activeUf || (card.dataset.uf ?? "").toUpperCase() === activeUf) &&
+        (!activeCargo || (card.dataset.cargo ?? "") === activeCargo) &&
+        (!activePartido || (card.dataset.partido ?? "").toUpperCase() === activePartido) &&
+        (!activeStatus || (card.dataset.status ?? "") === activeStatus) &&
+        (!query || (card.dataset.search ?? "").includes(query));
+      card.hidden = !ok;
+      if (ok) visible += 1;
+    }
+
+    if (empty) empty.hidden = visible > 0;
+    if (count) count.textContent = `${visible} perfil${visible === 1 ? "" : "s"} encontrado${visible === 1 ? "" : "s"}.`;
+    if (updateHistory) syncUrl((input?.value ?? "").trim());
+  };
+
+  for (const button of poderButtons) {
+    button.addEventListener("click", () => {
+      activePoder = button.dataset.poderFilter ?? "";
+      syncButtons();
+      applyFilter(true);
+    });
+  }
+
+  ufSelect?.addEventListener("change", () => { activeUf = ufSelect.value.toUpperCase(); applyFilter(true); });
+  cargoSelect?.addEventListener("change", () => { activeCargo = cargoSelect.value; applyFilter(true); });
+  partidoSelect?.addEventListener("change", () => { activePartido = partidoSelect.value.toUpperCase(); applyFilter(true); });
+  statusSelect?.addEventListener("change", () => { activeStatus = statusSelect.value; applyFilter(true); });
+  sortSelect?.addEventListener("change", () => { activeSort = sortSelect.value || "nome"; applyFilter(true); });
+  viewToggle?.addEventListener("click", () => {
+    const isList = grid?.classList.toggle("is-list") ?? false;
+    viewToggle.setAttribute("aria-pressed", String(isList));
+    viewToggle.textContent = isList ? "Grade" : "Lista";
+    viewToggle.setAttribute("aria-label", isList ? "Exibir perfis em grade" : "Exibir perfis em lista");
+  });
+
+  input?.addEventListener("input", () => applyFilter(true));
+  form?.addEventListener("submit", (event) => { event.preventDefault(); applyFilter(true); });
+
+  syncButtons();
+  applyFilter(false);
+  window.addEventListener("popstate", () => {
+    const current = new URLSearchParams(window.location.search);
+    activePoder = current.get("poder") ?? "";
+    activeUf = (current.get("uf") ?? "").toUpperCase();
+    activeCargo = current.get("cargo") ?? "";
+    activePartido = (current.get("partido") ?? "").toUpperCase();
+    activeStatus = current.get("status") ?? "";
+    activeSort = current.get("sort") ?? "nome";
+    if (input) input.value = current.get("q") ?? "";
+    if (ufSelect) ufSelect.value = activeUf;
+    if (cargoSelect) cargoSelect.value = activeCargo;
+    if (partidoSelect) partidoSelect.value = activePartido;
+    if (statusSelect) statusSelect.value = activeStatus;
+    if (sortSelect) sortSelect.value = activeSort;
+    syncButtons();
+    applyFilter(false);
+  });
+</script>

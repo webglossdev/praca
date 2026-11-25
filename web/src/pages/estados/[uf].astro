@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PersonCard from "../../components/PersonCard.astro";
+import { pessoas } from "../../data/pessoas";
+
+const uf = (Astro.params.uf ?? "").toUpperCase();
+const pessoasDoEstado = pessoas.filter((pessoa) => pessoa.mandatos[0]?.uf === uf);
+export function getStaticPaths() {
+  return [...new Set(pessoas.map((pessoa) => pessoa.mandatos[0]?.uf).filter((uf): uf is string => Boolean(uf)))].map((uf) => ({ params: { uf: uf.toLowerCase() } }));
+}
+---
+<Layout title={`${uf} · Estados · Praça`} description={`Representantes vinculados a ${uf}.`}>
+  <div class="wrap page">
+    <header class="page-header">
+      <a href="/estados">← Todos os estados</a>
+      <span class="eyebrow">Unidade da Federação</span>
+      <h1>{uf}</h1>
+      <p class="lede">{pessoasDoEstado.length} perfil(is) registrado(s) em {uf}.</p>
+    </header>
+    <div class="people-grid">{pessoasDoEstado.map((pessoa) => <PersonCard pessoa={pessoa} />)}</div>
+  </div>
+</Layout>

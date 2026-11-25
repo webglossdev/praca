@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guia de estilo v0 · Praça (título de trabalho)</title>
+  <meta name="description" content="Guia de estilo vivo do projeto: cores, tipografia e componentes da direção Tinta &amp; Papel.">
+  <!-- Só para este preview. Em produção as fontes são self-hosted (fontsource): zero requisições a terceiros. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..600&family=Instrument+Sans:wght@400..700&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 400 var(--step-0)/var(--leading-body) var(--font-ui);
+      background-image: radial-gradient(light-dark(rgb(20 22 31 / .035), rgb(255 255 255 / .03)) 1px, transparent 1px);
+      background-size: 4px 4px;               /* grão de papel */
+    }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-0); }
+    a { color: inherit; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: currentColor; }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: var(--leading-tight); letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+    p { margin: 0; text-wrap: pretty; }
+    .wrap { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+    .mono { font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: .02em; }
+    .eyebrow { font: 500 var(--step--2)/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+
+    /* barra tripartite: assinatura visual */
+    .tripartite { display: grid; grid-template-columns: repeat(3, 1fr); height: 5px; }
+    .tripartite i:nth-child(1) { background: var(--leg); }
+    .tripartite i:nth-child(2) { background: var(--exe); }
+    .tripartite i:nth-child(3) { background: var(--jud); }
+
+    header.site { position: sticky; top: 0; z-index: 10; background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: var(--hairline) solid var(--line); }
+    header.site .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); padding-block: var(--s-4); }
+    .logo { font: 700 var(--step-2)/1 var(--font-display); letter-spacing: -0.03em; text-decoration: none; }
+    .logo span { color: var(--signal); }
+    nav ul { display: flex; gap: var(--s-5); list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: var(--step--1); }
+    nav a { text-decoration: none; padding-block: var(--s-2); border-bottom: 2px solid transparent; transition: border-color var(--dur-2) var(--ease-out); }
+    nav a:hover { border-color: var(--text); }
+    .theme-btn { font: 500 var(--step--1)/1 var(--font-mono); padding: var(--s-2) var(--s-3); border: var(--hairline) solid var(--line-strong); background: var(--surface); color: var(--text); border-radius: var(--radius-pill); cursor: pointer; transition: transform var(--dur-1) var(--ease-out); }
+    .theme-btn:active { transform: scale(.96); }
+
+    .hero { padding-block: var(--s-9) var(--s-8); display: grid; gap: var(--s-6); }
+    .hero h1 { font-size: var(--step-5); font-weight: 700; max-width: 14ch; font-variation-settings: "opsz" 144, "SOFT" 30; }
+    .hero p.lede { max-width: var(--measure); color: var(--text-soft); font-size: var(--step-1); line-height: var(--leading-snug); }
+
+    section.block { padding-block: var(--s-7); border-top: var(--hairline) solid var(--line); }
+    section.block > .head { display: grid; gap: var(--s-2); margin-bottom: var(--s-6); }
+    section.block h2 { font-size: var(--step-3); }
+
+    /* paleta */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); gap: var(--s-4); }
+    .sw { border: var(--hairline) solid var(--line); background: var(--surface); border-radius: var(--radius-1); overflow: hidden; }
+    .sw .chip { height: 5rem; }
+    .sw .meta { padding: var(--s-3); display: grid; gap: 2px; }
+    .sw b { font-weight: 600; font-size: var(--step--1); }
+    .sw .mono { color: var(--text-muted); font-size: var(--step--2); }
+
+    /* tipografia */
+    .type-row { display: grid; grid-template-columns: 9rem 1fr; gap: var(--s-4); align-items: baseline; padding-block: var(--s-4); border-bottom: var(--hairline) dashed var(--line); }
+    @media (max-width: 40rem) { .type-row { grid-template-columns: 1fr; } }
+
+    /* cartões dos poderes */
+    .poderes { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--s-4); }
+    .poder { border: var(--hairline) solid var(--line); background: var(--surface); border-radius: var(--radius-1); border-top: 4px solid var(--poder); padding: var(--s-5); display: grid; gap: var(--s-2); transition: transform var(--dur-2) var(--ease-out), background var(--dur-2); text-decoration: none; }
+    .poder:hover { transform: translateY(-3px); background: var(--poder-wash); }
+    .poder .label { color: var(--poder-text); font: 600 var(--step--2)/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
+    .poder .num { font: 700 var(--step-4)/1 var(--font-display); font-variant-numeric: lining-nums; }
+    .poder .what { color: var(--text-muted); font-size: var(--step--1); }
+
+    /* perfil + régua de fonte */
+    .perfil { border: var(--hairline) solid var(--line-strong); background: var(--surface); border-radius: var(--radius-1); max-width: 34rem; overflow: hidden; }
+    .perfil .top { display: flex; gap: var(--s-4); padding: var(--s-5); align-items: center; }
+    .mono-avatar { width: 4rem; height: 4rem; border-radius: 50%; display: grid; place-items: center; font: 700 var(--step-2)/1 var(--font-display); background: var(--poder-wash); color: var(--poder-text); border: 2px solid var(--poder); flex: none; }
+    .perfil h3 { font-size: var(--step-2); }
+    .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-2); }
+    .chip-tag { font: 500 var(--step--2)/1 var(--font-mono); letter-spacing: .06em; padding: 5px 8px; border-radius: var(--radius-0); border: var(--hairline) solid var(--line-strong); background: var(--bg-raised); }
+    .chip-tag.poder-tag { background: var(--poder-wash); color: var(--poder-text); border-color: transparent; }
+    .perfil .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--hairline) solid var(--line); }
+    .perfil .stats div { padding: var(--s-4) var(--s-5); border-right: var(--hairline) solid var(--line); }
+    .perfil .stats div:last-child { border-right: 0; }
+    .perfil .stats b { display: block; font: 700 var(--step-2)/1 var(--font-display); }
+    .perfil .stats span { font-size: var(--step--2); color: var(--text-muted); }
+
+    .fonte { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); align-items: center; padding: var(--s-2) var(--s-5); font: 400 var(--step--2)/1.4 var(--font-mono); color: var(--text-muted); background: var(--surface-sunk);
+      background-image: repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 8px); background-size: 100% 4px; background-repeat: no-repeat; background-position: top; border-top: var(--hairline) solid var(--line); }
+    .fonte b { color: var(--text-soft); font-weight: 600; letter-spacing: .1em; }
+    .fonte a { margin-left: auto; }
+
+    /* atribuição de imprensa */
+    .atribuicao { max-width: 40rem; border: var(--hairline) dashed var(--atrib); background: var(--atrib-wash); border-left: 4px solid var(--atrib); border-radius: var(--radius-0); padding: var(--s-5); display: grid; gap: var(--s-3); }
+    .atribuicao .rotulo { font: 600 var(--step--2)/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--atrib); }
+    .atribuicao q { font: 500 var(--step-1)/var(--leading-snug) var(--font-display); quotes: "“" "”"; }
+    .atribuicao .desfecho { padding-top: var(--s-3); border-top: var(--hairline) solid var(--line-strong); font-size: var(--step--1); }
+    .atribuicao .desfecho b { font-family: var(--font-mono); font-size: var(--step--2); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* botões, ao vivo */
+    .row { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center; }
+    .btn { font: 600 var(--step--1)/1 var(--font-ui); padding: var(--s-3) var(--s-5); border-radius: var(--radius-1); border: var(--hairline) solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; text-decoration: none; transition: transform var(--dur-1) var(--ease-out), box-shadow var(--dur-2) var(--ease-out); }
+    .btn:hover { box-shadow: 4px 4px 0 var(--poder, var(--leg)); transform: translate(-2px, -2px); }
+    .btn.ghost { background: transparent; color: var(--text); }
+    .live { display: inline-flex; align-items: center; gap: var(--s-2); font: 600 var(--step--2)/1 var(--font-mono); letter-spacing: .12em; padding: 6px 10px; border-radius: var(--radius-pill); background: var(--signal); color: #fff; }
+    .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: pulso 1.6s var(--ease-in-out) infinite; }
+    @keyframes pulso { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+    @media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+
+    .noticia { display: grid; grid-template-columns: 1fr auto; gap: var(--s-4); padding-block: var(--s-4); border-bottom: var(--hairline) solid var(--line); align-items: baseline; max-width: 44rem; }
+    .noticia h3 { font: 600 var(--step-1)/var(--leading-snug) var(--font-display); }
+    .noticia .mono { color: var(--text-muted); font-size: var(--step--2); white-space: nowrap; }
+
+    footer { padding-block: var(--s-7); border-top: var(--hairline) solid var(--line-strong); color: var(--text-muted); font-size: var(--step--1); }
+  </style>
+</head>
+<body>
+  <div class="tripartite" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="site">
+    <div class="wrap bar">
+      <a class="logo" href="#topo" id="topo">Praça<span>.</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="#paleta">Cor</a></li>
+          <li><a href="#tipografia">Tipografia</a></li>
+          <li><a href="#componentes">Componentes</a></li>
+        </ul>
+      </nav>
+      <button class="theme-btn" id="tema" type="button" aria-label="Alternar tema claro e escuro">◐ tema</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Guia de estilo v0 · título de trabalho</p>
+      <h1>Quem decide, como vota e quem paga.</h1>
+      <p class="lede">Direção <em>Tinta &amp; Papel</em>: sóbria como um jornal, precisa como um cartório. Três cores identificam os Poderes e nenhuma delas é partidária. Dados fictícios nesta página.</p>
+    </div>
+
+    <section class="block" id="paleta" aria-labelledby="h-paleta">
+      <div class="head"><p class="eyebrow">01 · Cor</p><h2 id="h-paleta">Papel, tinta e três Poderes</h2></div>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:var(--bg)"></div><div class="meta"><b>Papel</b><span class="mono">--bg</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--surface-sunk)"></div><div class="meta"><b>Papel fundo</b><span class="mono">--surface-sunk</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--text)"></div><div class="meta"><b>Tinta</b><span class="mono">--text</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--text-muted)"></div><div class="meta"><b>Tinta suave</b><span class="mono">--text-muted</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--leg)"></div><div class="meta"><b>Legislativo · verdigris</b><span class="mono">--leg</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--exe)"></div><div class="meta"><b>Executivo · âmbar</b><span class="mono">--exe</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--jud)"></div><div class="meta"><b>Judiciário · índigo</b><span class="mono">--jud</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--signal)"></div><div class="meta"><b>Sinal · ao vivo</b><span class="mono">--signal</span></div></div>
+        <div class="sw"><div class="chip" style="background:var(--atrib)"></div><div class="meta"><b>Atribuição · fumê</b><span class="mono">--atrib</span></div></div>
+      </div>
+    </section>
+
+    <section class="block" id="tipografia" aria-labelledby="h-tipo">
+      <div class="head"><p class="eyebrow">02 · Tipografia</p><h2 id="h-tipo">Serifa editorial, sans precisa, mono para provas</h2></div>
+      <div class="type-row"><span class="mono">Display · Fraunces</span><p style="font:700 var(--step-4)/1.05 var(--font-display);letter-spacing:-.02em">Votou, aprovou, pagou.</p></div>
+      <div class="type-row"><span class="mono">Título · Fraunces 600</span><p style="font:600 var(--step-2)/1.2 var(--font-display)">Mandato atual e histórico de cargos</p></div>
+      <div class="type-row"><span class="mono">Texto · Instrument Sans</span><p style="max-width:var(--measure)">Cada dado exibido leva fonte, data de coleta e link. Quando a informação vem da imprensa, o site diz isso com todas as letras e mostra o desfecho mais recente.</p></div>
+      <div class="type-row"><span class="mono">Dado · JetBrains Mono</span><p class="mono">R$ 1.234.567,89 · 513 deputados · coletado em 04/10/2026</p></div>
+    </section>
+
+    <section class="block" id="componentes" aria-labelledby="h-comp">
+      <div class="head"><p class="eyebrow">03 · Componentes</p><h2 id="h-comp">Peças que se repetem em todo o site</h2></div>
+
+      <h3 style="font-size:var(--step-1);margin-bottom:var(--s-4)">Cartões dos Poderes</h3>
+      <div class="poderes" style="margin-bottom:var(--s-8)">
+        <a class="poder" data-poder="legislativo" href="#componentes"><span class="label">Legislativo</span><span class="num">594</span><span class="what">deputados e senadores</span></a>
+        <a class="poder" data-poder="executivo" href="#componentes"><span class="label">Executivo</span><span class="num">29+</span><span class="what">governadores e ministros</span></a>
+        <a class="poder" data-poder="judiciario" href="#componentes"><span class="label">Judiciário</span><span class="num">11</span><span class="what">ministros do STF</span></a>
+      </div>
+
+      <h3 style="font-size:var(--step-1);margin-bottom:var(--s-4)">Cartão de perfil com régua de fonte <span class="mono" style="color:var(--text-muted)">(pessoa fictícia)</span></h3>
+      <article class="perfil" data-poder="legislativo" style="margin-bottom:var(--s-8)">
+        <div class="top">
+          <div class="mono-avatar" aria-hidden="true">FT</div>
+          <div>
+            <h3>Fulana de Tal</h3>
+            <div class="chips"><span class="chip-tag poder-tag">DEPUTADA FEDERAL</span><span class="chip-tag">XYZ</span><span class="chip-tag">UF</span></div>
+          </div>
+        </div>
+        <div class="stats">
+          <div><b>94%</b><span>presença em votações</span></div>
+          <div><b>37</b><span>projetos de autoria</span></div>
+          <div><b>3º</b><span>mandato</span></div>
+        </div>
+        <div class="fonte"><b>FONTE</b><span>Câmara dos Deputados</span><span>·</span><span>coletado em 04/10/2026</span><a href="#componentes">ver origem ↗</a></div>
+      </article>
+
+      <h3 style="font-size:var(--step-1);margin-bottom:var(--s-4)">Atribuição de imprensa <span class="mono" style="color:var(--text-muted)">(texto fictício)</span></h3>
+      <aside class="atribuicao" style="margin-bottom:var(--s-8)" aria-label="Informação atribuída à imprensa">
+        <p class="rotulo">Segundo a imprensa · não é afirmação deste site</p>
+        <q>Título original da matéria, exatamente como publicado pelo veículo</q>
+        <p class="mono" style="color:var(--text-muted)">Veículo Exemplo · 02/10/2026 · <a href="#componentes">ler a matéria ↗</a></p>
+        <p class="desfecho"><b>Desfecho atualizado</b><br>Inquérito arquivado em 15/09/2026, conforme decisão citada na fonte oficial.</p>
+      </aside>
+
+      <h3 style="font-size:var(--step-1);margin-bottom:var(--s-4)">Ao vivo, botões e notícias</h3>
+      <div class="row" style="margin-bottom:var(--s-6)">
+        <span class="live">AO VIVO</span>
+        <a class="btn" data-poder="legislativo" href="#componentes">Ver perfil</a>
+        <a class="btn ghost" data-poder="judiciario" href="#componentes">Ver fontes</a>
+      </div>
+      <div>
+        <article class="noticia"><h3>Plenário vota texto-base de projeto de exemplo</h3><span class="mono">AGÊNCIA · 04/10/2026</span></article>
+        <article class="noticia"><h3>Comissão aprova requerimento de exemplo por 12 a 9</h3><span class="mono">VEÍCULO · 03/10/2026</span></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><p class="mono">Tokens em <code>design/tokens.css</code> · código sob AGPL-3.0-or-later · este guia usa dados fictícios.</p></div>
+  </footer>
+
+  <script>
+    const raiz = document.documentElement, btn = document.getElementById('tema');
+    btn.addEventListener('click', () => {
+      const escuro = (raiz.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+      raiz.dataset.theme = escuro ? 'light' : 'dark';
+    });
+  </script>
+</body>
+</html>

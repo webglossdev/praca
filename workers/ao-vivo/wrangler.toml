@@ -1,0 +1,7 @@
+name = "praca-ao-vivo"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+ALLOWED_ORIGIN = "*"
+CACHE_TTL_SECONDS = "60"

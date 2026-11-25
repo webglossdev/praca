@@ -1,0 +1,40 @@
+---
+import type { Pessoa } from "../data/pessoas";
+import { initials } from "../data/pessoas";
+
+interface Props { pessoa: Pessoa }
+const { pessoa } = Astro.props;
+const mandato = pessoa.mandatos[0];
+---
+<a
+  class="person-card"
+  data-pid={pessoa.pid}
+  data-nome={pessoa.nome_publico}
+  data-poder={mandato?.poder ?? ""}
+  data-uf={mandato?.uf ?? ""}
+  data-partido={pessoa.partido?.sigla ?? ""}
+  data-cargo={mandato?.cargo ?? ""}
+  data-status={mandato?.status ?? ""}
+  data-search={`${pessoa.nome} ${pessoa.nome_publico} ${pessoa.partido?.sigla ?? ""} ${mandato?.cargo ?? ""} ${mandato?.uf ?? ""} ${mandato?.status ?? ""}`.toLocaleLowerCase("pt-BR")}
+  href={`/pessoas/${pessoa.slug}`}
+>
+  <div class="person-top">
+    <div class="avatar" aria-hidden="true">{initials(pessoa.nome_publico)}</div>
+    <div>
+      <h2>{pessoa.nome_publico}</h2>
+      <p class="muted">{mandato?.cargo}{mandato?.uf ? ` · ${mandato.uf}` : ""}</p>
+    </div>
+  </div>
+  <div>
+    <span class="tag">{mandato?.poder}</span>
+    {pessoa.partido && <span class="tag tag-neutral">{pessoa.partido.sigla}</span>}
+    {mandato?.status === "eleito_aguardando_posse" && (
+      <span class="tag tag-neutral">aguardando posse ({mandato.inicio.slice(0, 4)})</span>
+    )}
+  </div>
+  <div class="source">
+    <span>FONTE · {pessoa.fontes[0]?.valor}</span>
+    <span>{pessoa.fontes[0]?.coletado_em.slice(0, 10)}</span>
+    <span aria-hidden="true">↗</span>
+  </div>
+</a>

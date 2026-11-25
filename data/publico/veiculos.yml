@@ -1,0 +1,48 @@
+- id: agencia-camara
+  nome: Agência Câmara
+  tipo: oficial
+  licenca_aberta: uso livre com atribuição (Agência Câmara de Notícias)
+  feed: https://www.camara.leg.br/agencia/feeds/rss.xml
+  politica: matéria oficial pode exibir texto integral com atribuição e link canônico
+- id: agencia-senado
+  nome: Agência Senado
+  tipo: oficial
+  licenca_aberta: uso livre com atribuição (Agência Senado)
+  feed: https://www12.senado.leg.br/noticias/rss
+  politica: matéria oficial pode exibir texto integral com atribuição e link canônico
+- id: agencia-brasil
+  nome: Agência Brasil (EBC)
+  tipo: oficial
+  licenca_aberta: CC BY 3.0 BR
+  feed: https://agenciabrasil.ebc.com.br/rss/politica/feed.xml
+  politica: conteúdo sob CC BY 3.0 BR com crédito obrigatório e link canônico
+- id: stf-noticias
+  nome: Notícias do STF
+  tipo: oficial
+  licenca_aberta: uso institucional com crédito e link canônico
+  feed: https://noticias.stf.jus.br/rss
+  politica: nota institucional oficial com link canônico para decisão ou pauta
+- id: tse-noticias
+  nome: Notícias do TSE
+  tipo: oficial
+  licenca_aberta: uso institucional com crédito e link canônico
+  feed: https://www.tse.jus.br/comunicacao/noticias/rss
+  politica: nota institucional eleitoral oficial com link canônico
+- id: poder360
+  nome: Poder360
+  tipo: imprensa
+  licenca_aberta: null
+  feed: https://www.poder360.com.br/feed/
+  politica: título, veículo, data, trecho curto (máx. 500 caracteres) e link; nunca copiar matéria integral
+- id: g1-politica
+  nome: g1 Política
+  tipo: imprensa
+  licenca_aberta: null
+  feed: https://g1.globo.com/rss/g1/politica/
+  politica: título, veículo, data, trecho curto (máx. 500 caracteres) e link; nunca copiar matéria integral
+- id: bbc-brasil
+  nome: BBC News Brasil
+  tipo: imprensa
+  licenca_aberta: null
+  feed: https://feeds.bbci.co.uk/portuguese/rss.xml
+  politica: título, veículo, data, trecho curto (máx. 500 caracteres) e link; nunca copiar matéria integral

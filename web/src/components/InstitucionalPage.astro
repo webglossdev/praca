@@ -1,0 +1,117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { fontes, institucionalPaginas } from "../data/portal";
+
+interface Props {
+  slug: "fontes" | "dados" | "sobre" | "privacidade" | "termos";
+}
+
+const { slug } = Astro.props;
+const pagina = institucionalPaginas[slug] ?? institucionalPaginas.sobre;
+---
+<Layout title={`${pagina.titulo} · Praça`} description={pagina.resumo}>
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Institucional</span>
+      <h1>{pagina.titulo}</h1>
+      <p class="lede">{pagina.texto}</p>
+    </header>
+
+    {slug === "fontes" && (
+      <section class="section" aria-labelledby="fontes-catalogo-title">
+        <div class="section-heading">
+          <h2 id="fontes-catalogo-title">Catálogo completo de fontes ({fontes.length})</h2>
+          <a href="/metodologia">Como validamos os dados →</a>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Fonte oficial</th>
+                <th>Licença / termos</th>
+                <th>Frequência</th>
+                <th>Portal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fontes.map((fonte) => (
+                <tr>
+                  <td><code>{fonte.id}</code></td>
+                  <td><strong>{fonte.nome}</strong></td>
+                  <td>{fonte.licenca}</td>
+                  <td>{fonte.frequencia}</td>
+                  <td><a href={fonte.url} target="_blank" rel="noopener noreferrer">Abrir portal ↗</a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top: var(--s-4)">
+          Fontes normativas adicionais dos módulos educativos estão listadas nos rodapés de <a href="/aprender">Como funciona</a>, <a href="/guia-do-cidadao">Guia do Cidadão</a> e <a href="/glossario">Glossário</a>.
+        </p>
+      </section>
+    )}
+
+    {slug === "dados" && (
+      <section class="section" aria-labelledby="downloads-title">
+        <div class="section-heading">
+          <h2 id="downloads-title">Downloads e contratos abertos</h2>
+          <a href="/fontes">Ver catálogo de fontes →</a>
+        </div>
+        <div class="two-col">
+          <article class="card">
+            <span class="eyebrow">JSON · UTF-8</span>
+            <h3>Perfis públicos (pessoas.json)</h3>
+            <p class="muted">Exportação com indentação determinística, IDs estáveis (<code>pid</code>), mandatos, partido, despesas, votos e proveniência.</p>
+            <div class="card-actions">
+              <a class="button" href="/downloads/pessoas.json">Baixar pessoas.json</a>
+            </div>
+          </article>
+          <article class="card">
+            <span class="eyebrow">JSON · UTF-8</span>
+            <h3>Cobertura pública</h3>
+            <p class="muted">Arquivos separados para notícias, votações, estado ao vivo, status dos coletores e catálogo de fontes.</p>
+            <div class="card-actions">
+              <a class="button secondary small" href="/downloads/noticias.json">Notícias</a>
+              <a class="button secondary small" href="/downloads/votacoes.json">Votações</a>
+              <a class="button secondary small" href="/downloads/ao-vivo.json">Ao vivo</a>
+              <a class="button secondary small" href="/downloads/status.json">Status</a>
+              <a class="button secondary small" href="/downloads/fontes.json">Fontes</a>
+            </div>
+          </article>
+          <article class="card">
+            <span class="eyebrow">Transparência</span>
+            <h3>Licença e metodologia</h3>
+            <p class="muted">Código sob AGPL-3.0-or-later e contratos validados por Pydantic v2 + JSON Schema antes de ir ao ar.</p>
+            <div class="card-actions">
+              <a class="button secondary" href="/metodologia">Ler metodologia →</a>
+              <a class="button secondary" href="/status">Ver saúde dos coletores</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    )}
+
+    {(slug === "sobre" || slug === "privacidade" || slug === "termos") && (
+      <section class="section">
+        <div class="two-col">
+          <article class="card">
+            <span class="eyebrow">Princípio editorial</span>
+            <h3>Neutralidade e citação obrigatória</h3>
+            <p class="muted">Nenhum dado político é exibido sem fonte pública identificável, data de coleta e link para verificação direta.</p>
+            <div class="card-actions">
+              <a class="button secondary small" href="/metodologia">Metodologia →</a>
+              <a class="button secondary small" href="/corrigir">Solicitar correção</a>
+            </div>
+          </article>
+          <article class="card">
+            <span class="eyebrow">Privacidade</span>
+            <h3>Zero cookies e zero rastreamento</h3>
+            <p class="muted">Não utilizamos cookies de terceiros, pixels ou perfis comportamentais. O estado de tema claro/escuro é local ao seu navegador.</p>
+          </article>
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>

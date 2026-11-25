@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { correcoes, statusColetores } from "../data/portal";
+---
+<Layout title="Saúde dos coletores e status · Praça" description="Monitoramento público de fontes, latência, circuit breakers e política de fallback offline.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Observabilidade pública</span>
+      <h1>Status das fontes e coletores</h1>
+      <p class="lede">Quando uma API oficial sai do ar, o Circuit Breaker preserva o último snapshot válido em cache e sinaliza degradação nesta página sem inventar dados novos.</p>
+    </header>
+
+    <section class="section">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Fonte</th><th>Status</th><th>Circuit Breaker</th><th>Última coleta</th><th>Latência</th><th>Observação</th></tr></thead>
+          <tbody>
+            {statusColetores.map((s) => (
+              <tr>
+                <td><strong>{s.nome}</strong> <span class="mono muted">({s.fonte_id})</span></td>
+                <td><span class="tag">{s.status}</span></td>
+                <td class="mono">{s.circuit_breaker}</td>
+                <td class="mono">{s.ultima_coleta ? s.ultima_coleta.slice(0, 16).replace("T", " ") : "—"}</td>
+                <td class="mono">{s.latencia_ms != null ? `${s.latencia_ms} ms` : "—"}</td>
+                <td class="muted">{s.observacao}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <h2>Últimas correções publicadas</h2>
+        <a href="/corrigir">Abrir ou solicitar correção →</a>
+      </div>
+      <div class="two-col">
+        {correcoes.map((c) => (
+          <article class="card">
+            <span class="eyebrow">{c.data} · {c.pagina}</span>
+            <h3>{c.alteracao}</h3>
+            <p class="muted">{c.motivo}</p>
+            <a href={c.fonte_url} rel="noopener noreferrer" target="_blank">Documento oficial ↗</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>

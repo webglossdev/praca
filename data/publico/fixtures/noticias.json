@@ -1,0 +1,81 @@
+[
+  {
+    "id": "not-camara-2026-01",
+    "titulo": "Comissão aprova regras de transparência ativa para convênios federais",
+    "veiculo": "Agência Câmara",
+    "publicado_em": "2026-10-03T18:30:00Z",
+    "url": "https://www.camara.leg.br/noticias/pl-1042-2026-transparencia",
+    "trecho": "Relatório relatado na Comissão de Finanças prevê publicação mensal em formato aberto dos repasses federais executados por consórcios.",
+    "pessoa_pids": ["pid_fulana-de-tal-uf"],
+    "poder": "legislativo",
+    "tema": "Transparência pública",
+    "tipo_fonte": "oficial",
+    "licenca_texto_integral": "Uso livre com citação da fonte oficial e link canônico.",
+    "corpo_integral": [
+      "A Comissão de Finanças e Tributação aprovou nesta semana o substitutivo ao PL 1042/2026, voltado à padronização de prestações de contas de convênios executados por consórcios intermunicipais.",
+      "O texto exige identificação do contrato, valor empenhado, valor liquidado e cronograma físico em dados abertos antes do repasse da parcela seguinte."
+    ]
+  },
+  {
+    "id": "not-imprensa-2026-02",
+    "titulo": "Auditoria examina repasses de infraestrutura escolar no interior",
+    "veiculo": "Veículo Exemplo",
+    "publicado_em": "2026-10-04T11:15:00Z",
+    "url": "https://jornal.example.org/auditoria-convenios",
+    "trecho": "Reportagem aponta análise técnica em convênios de transporte escolar firmados em 2024; conteúdo completo disponível exclusivamente no site original.",
+    "pessoa_pids": ["pid_fulana-de-tal-uf"],
+    "poder": "legislativo",
+    "tema": "Fiscalização",
+    "tipo_fonte": "imprensa",
+    "licenca_texto_integral": null,
+    "corpo_integral": []
+  },
+  {
+    "id": "not-agbrasil-2026-03",
+    "titulo": "Estados debatem integração de dados do ensino técnico com o governo federal",
+    "veiculo": "Agência Brasil",
+    "publicado_em": "2026-09-29T15:00:00Z",
+    "url": "https://agenciabrasil.ebc.com.br/educacao/noticia/integracao-ensino-tecnico",
+    "trecho": "Secretarias estaduais firmaram protocolo de intercâmbio estatístico de matrículas e evasão sob licença CC BY 3.0 BR.",
+    "pessoa_pids": ["pid_joao-da-silva-sp"],
+    "poder": "executivo",
+    "tema": "Educação técnica",
+    "tipo_fonte": "oficial",
+    "licenca_texto_integral": "CC BY 3.0 BR",
+    "corpo_integral": [
+      "Governadores e representantes do Ministério da Educação assinaram protocolo de interoperabilidade para acompanhar vagas de ensino médio integrado em todo o país."
+    ]
+  },
+  {
+    "id": "not-stf-2026-04",
+    "titulo": "Supremo publica balanço anual de transparência processual no portal Corte Aberta",
+    "veiculo": "Notícias do STF",
+    "publicado_em": "2026-09-22T14:20:00Z",
+    "url": "https://noticias.stf.jus.br/balanco-corte-aberta",
+    "trecho": "Painéis abertos detalham tempos médios de tramitação e distribuição colegiada por classe processual.",
+    "pessoa_pids": ["pid_ministra-exemplo-stf"],
+    "poder": "judiciario",
+    "tema": "Dados abertos",
+    "tipo_fonte": "oficial",
+    "licenca_texto_integral": "Nota institucional oficial com link canônico.",
+    "corpo_integral": [
+      "O painel Corte Aberta disponibiliza extração aberta de acervo, pautas de julgamento e produtividade das turmas e do plenário."
+    ]
+  },
+  {
+    "id": "not-senado-2026-05",
+    "titulo": "Senado conclui votação em segundo turno de proposta sobre partilha ambiental",
+    "veiculo": "Agência Senado",
+    "publicado_em": "2026-09-25T20:10:00Z",
+    "url": "https://www12.senado.leg.br/noticias/materias/2026/09/25/pec-10-partilha-ambiental",
+    "trecho": "Com 49 votos favoráveis, plenário aprovou novos critérios federativos de redistribuição de compensações ambientais.",
+    "pessoa_pids": ["pid_rafael-cardoso-rj"],
+    "poder": "legislativo",
+    "tema": "Pacto federativo",
+    "tipo_fonte": "oficial",
+    "licenca_texto_integral": "Uso livre com citação da fonte oficial e link canônico.",
+    "corpo_integral": [
+      "O Plenário do Senado Federal aprovou em segundo turno a PEC 10/2026, com voto favorável do relator Rafael Cardoso (DEF-RJ)."
+    ]
+  }
+]

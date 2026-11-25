@@ -1,0 +1,31 @@
+name: Correção de dado público
+description: Apontar erro, desatualização ou desfecho processual com fonte oficial comprovando
+title: "[correção] "
+labels: ["dados", "correcao"]
+body:
+  - type: input
+    id: pagina
+    attributes:
+      label: Página ou perfil afetado
+      placeholder: Ex.: /pessoas/fulana-de-tal-uf ou /votacoes/vot-01
+    validations:
+      required: true
+  - type: textarea
+    id: o-que-mudar
+    attributes:
+      label: O que está incorreto ou desatualizado?
+      description: Descreva exatamente qual campo, data, número ou atribuição precisa de ajuste.
+    validations:
+      required: true
+  - type: input
+    id: fonte-oficial
+    attributes:
+      label: URL da fonte oficial ou documento público que comprova
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: motivo
+    attributes:
+      label: Contexto adicional / desfecho atualizado
+      description: Em caso de processo/atribuição, informe data do desfecho (arquivamento, absolvição, decisão colegiada etc.).

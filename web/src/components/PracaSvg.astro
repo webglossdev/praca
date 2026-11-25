@@ -1,0 +1,42 @@
+---
+interface Props {
+  variant?: "hero" | "ao-vivo";
+  emSessao?: boolean;
+}
+
+const { variant = "hero", emSessao = false } = Astro.props;
+---
+<figure class={`praca-svg praca-svg--${variant}`} aria-hidden="true">
+  <svg viewBox="0 0 360 176" role="presentation" fill="none">
+    <line x1="12" y1="152" x2="348" y2="152" stroke="var(--line-strong)" stroke-width="1.5" />
+    <line x1="28" y1="162" x2="332" y2="162" stroke="var(--line)" stroke-width="1" />
+
+    <!-- Bloco Legislativo (Câmara e Senado - verdigris) -->
+    <g>
+      <rect x="34" y="54" width="84" height="98" rx="2" fill="var(--leg-wash)" stroke="var(--leg)" stroke-width="2" />
+      <path d="M46 92 A30 22 0 0 1 106 92 Z" fill="var(--surface)" stroke="var(--leg)" stroke-width="1.5" />
+      <line x1="56" y1="108" x2="56" y2="152" stroke="var(--leg)" stroke-width="1.5" />
+      <line x1="76" y1="108" x2="76" y2="152" stroke="var(--leg)" stroke-width="1.5" />
+      <line x1="96" y1="108" x2="96" y2="152" stroke="var(--leg)" stroke-width="1.5" />
+      {emSessao && <circle cx="106" cy="64" r="5" fill="var(--signal)" />}
+    </g>
+
+    <!-- Bloco Executivo (Planalto / Esplanada - âmbar) -->
+    <g>
+      <rect x="138" y="34" width="84" height="118" rx="2" fill="var(--exe-wash)" stroke="var(--exe)" stroke-width="2" />
+      <line x1="132" y1="50" x2="228" y2="50" stroke="var(--exe)" stroke-width="2" />
+      <rect x="152" y="64" width="16" height="88" fill="var(--surface)" stroke="var(--exe)" stroke-width="1.5" />
+      <rect x="192" y="64" width="16" height="88" fill="var(--surface)" stroke="var(--exe)" stroke-width="1.5" />
+      <path d="M168 152 L180 124 L192 152" stroke="var(--exe)" stroke-width="1.5" fill="var(--bg)" />
+    </g>
+
+    <!-- Bloco Judiciário (STF / Tribunais - índigo) -->
+    <g>
+      <rect x="242" y="54" width="84" height="98" rx="2" fill="var(--jud-wash)" stroke="var(--jud)" stroke-width="2" />
+      <polygon points="238,54 284,26 330,54" fill="var(--surface)" stroke="var(--jud)" stroke-width="2" />
+      <line x1="258" y1="68" x2="258" y2="152" stroke="var(--jud)" stroke-width="1.5" />
+      <line x1="284" y1="68" x2="284" y2="152" stroke="var(--jud)" stroke-width="1.5" />
+      <line x1="310" y1="68" x2="310" y2="152" stroke="var(--jud)" stroke-width="1.5" />
+    </g>
+  </svg>
+</figure>

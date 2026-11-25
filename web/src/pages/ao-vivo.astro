@@ -1,0 +1,156 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PracaSvg from "../components/PracaSvg.astro";
+import SourceRule from "../components/SourceRule.astro";
+import { aoVivo } from "../data/portal";
+---
+<Layout title="Ao vivo · Praça" description="Agenda pública e transmissões institucionais de Câmara, Senado e STF sem cookies ou carregamento automático de terceiros.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Transmissões e agenda oficial</span>
+      <h1>Ao vivo nos Três Poderes</h1>
+      <p class="lede">
+        Estado atual: <strong data-live-state>{aoVivo.emSessao ? "há sessão ao vivo registrada" : "sem plenário ao vivo neste snapshot"}</strong>. Atualizado em <span data-live-updated>{aoVivo.atualizadoEm.slice(0, 10)}</span>. Incorporações de vídeo externas não fazem nenhuma requisição até você clicar para carregar.
+      </p>
+    </header>
+
+    <div class="two-col" style="margin-bottom: var(--s-6); align-items: start;">
+      <PracaSvg variant="ao-vivo" emSessao={aoVivo.emSessao} />
+      <div class="callout">
+        <strong>Política de privacidade em transmissões</strong>
+        <p class="muted">Ao carregar a página, nenhum script ou cookie do YouTube é carregado. Somente após clicar no botão de reprodução o player oficial em modo <code>youtube-nocookie.com</code> é inicializado.</p>
+        <p class="muted">Em produção, esta página também consulta o Worker edge <code>/api/ao-vivo</code> com cache público de 60 segundos.</p>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="agenda-title">
+      <div class="section-heading">
+        <h2 id="agenda-title">Agenda e sessões registradas</h2>
+        <span class="muted">{aoVivo.eventos.length} evento(s)</span>
+      </div>
+      <div class="step-list" data-live-list>
+        {aoVivo.eventos.map((ev) => (
+          <article class="step-card" data-poder={ev.poder}>
+            <div class="step-head">
+              <span class="tag">{ev.poder}</span>
+              <span class="tag">{ev.status.replaceAll("_", " ")}</span>
+              <span class="mono muted">{ev.horario}</span>
+            </div>
+            <h3>{ev.orgao} — {ev.titulo}</h3>
+            <p class="muted">{ev.pauta}</p>
+
+            {ev.youtube_id ? (
+              <div class="embed-shell" data-video-box={ev.youtube_id}>
+                <p class="muted">Transmissão institucional disponível sob demanda via <code>youtube-nocookie.com</code>.</p>
+                <button class="button small" type="button" data-load-video={ev.youtube_id} data-video-title={ev.titulo}>
+                  Carregar player externo (youtube-nocookie)
+                </button>
+              </div>
+            ) : (
+              <p class="muted mono">Sem ID de transmissão vinculado no snapshot; consulte o portal oficial.</p>
+            )}
+            <SourceRule fonte={ev.fonte.valor} coletadoEm={ev.fonte.coletado_em} url={ev.fonte.url} licenca={ev.fonte.licenca} />
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+<script>
+  type EventoLive = {
+    id: string;
+    poder: "legislativo" | "executivo" | "judiciario";
+    orgao: string;
+    titulo: string;
+    status: "ao_vivo" | "agendado" | "encerrado" | "indisponivel";
+    horario: string;
+    pauta: string;
+    youtube_id: string | null;
+    fonte: { valor: string; fonte_id: string; url: string; coletado_em: string; licenca: string };
+  };
+
+  const liveList = document.querySelector<HTMLElement>("[data-live-list]");
+  const liveState = document.querySelector<HTMLElement>("[data-live-state]");
+  const liveUpdated = document.querySelector<HTMLElement>("[data-live-updated]");
+
+  const renderLiveEvents = (eventos: EventoLive[]) => {
+    if (!liveList) return;
+    liveList.replaceChildren();
+    for (const ev of eventos) {
+      const article = document.createElement("article");
+      article.className = "step-card";
+      article.dataset.poder = ev.poder;
+
+      const head = document.createElement("div");
+      head.className = "step-head";
+      const poder = document.createElement("span");
+      poder.className = "tag";
+      poder.textContent = ev.poder;
+      const status = document.createElement("span");
+      status.className = "tag";
+      status.textContent = ev.status.replaceAll("_", " ");
+      const horario = document.createElement("span");
+      horario.className = "mono muted";
+      horario.textContent = ev.horario;
+      head.append(poder, status, horario);
+
+      const title = document.createElement("h3");
+      title.textContent = `${ev.orgao} — ${ev.titulo}`;
+      const pauta = document.createElement("p");
+      pauta.className = "muted";
+      pauta.textContent = ev.pauta || "Pauta não informada no snapshot.";
+
+      const source = document.createElement("div");
+      source.className = "source";
+      const fonte = document.createElement("span");
+      fonte.textContent = `FONTE · ${ev.fonte.valor}`;
+      const data = document.createElement("span");
+      data.textContent = ev.fonte.coletado_em.slice(0, 10);
+      const link = document.createElement("a");
+      link.href = ev.fonte.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Abrir fonte ↗";
+      source.append(fonte, data, link);
+      article.append(head, title, pauta, source);
+      liveList.append(article);
+    }
+  };
+
+  const atualizarAoVivo = async () => {
+    try {
+      const response = await fetch("/api/ao-vivo", { headers: { accept: "application/json" } });
+      if (!response.ok) return;
+      const data = await response.json() as {
+        emSessao: boolean;
+        atualizadoEm: string;
+        eventos: EventoLive[];
+        degradado?: boolean;
+      };
+      if (liveState) liveState.textContent = data.emSessao ? "há sessão ao vivo registrada" : "sem plenário ao vivo neste snapshot";
+      if (liveUpdated) liveUpdated.textContent = data.atualizadoEm.slice(0, 10);
+      if (!data.degradado) renderLiveEvents(data.eventos);
+    } catch {
+      // Mantém o snapshot estático já renderizado pelo Astro.
+    }
+  };
+
+  void atualizarAoVivo();
+
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-load-video]")];
+  for (const btn of buttons) {
+    btn.addEventListener("click", () => {
+      const videoId = btn.dataset.loadVideo;
+      const box = btn.closest<HTMLElement>("[data-video-box]");
+      if (!videoId || !box) return;
+      const iframe = document.createElement("iframe");
+      iframe.className = "embed-frame";
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0`;
+      iframe.title = btn.dataset.videoTitle || "Transmissão institucional";
+      iframe.loading = "lazy";
+      iframe.allowFullscreen = true;
+      iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+      box.replaceChildren(iframe);
+    });
+  }
+</script>

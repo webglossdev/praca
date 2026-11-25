@@ -1,0 +1,13 @@
+---
+import InstitucionalPage from "../../components/InstitucionalPage.astro";
+
+type PaginaSlug = "fontes" | "dados" | "sobre" | "privacidade" | "termos";
+const slug = (Astro.params.pagina ?? "sobre") as PaginaSlug;
+
+export function getStaticPaths() {
+  return (["fontes", "dados", "sobre", "privacidade", "termos"] as const).map((pagina) => ({
+    params: { pagina },
+  }));
+}
+---
+<InstitucionalPage slug={slug} />

@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PersonCard from "../../components/PersonCard.astro";
+import { pessoas } from "../../data/pessoas";
+
+const sigla = (Astro.params.sigla ?? "").toUpperCase();
+const pessoasDoPartido = pessoas.filter((pessoa) => pessoa.partido?.sigla === sigla);
+const info = pessoasDoPartido[0]?.partido;
+
+export function getStaticPaths() {
+  return [...new Set(pessoas.map((pessoa) => pessoa.partido?.sigla).filter(Boolean))].map((sigla) => ({ params: { sigla } }));
+}
+---
+<Layout title={`${sigla} · Partidos · Praça`} description={`Perfis filiados ao partido ${sigla}.`}>
+  <div class="wrap page">
+    <header class="page-header">
+      <a href="/partidos">← Todos os partidos</a>
+      <span class="eyebrow">Partido{info?.federacao ? ` · ${info.federacao}` : ""}</span>
+      <h1>{sigla}{info?.nome ? ` — ${info.nome}` : ""}</h1>
+      <p class="lede">{pessoasDoPartido.length} perfil(is) nesta edição.</p>
+    </header>
+    <div class="people-grid">{pessoasDoPartido.map((pessoa) => <PersonCard pessoa={pessoa} />)}</div>
+  </div>
+</Layout>

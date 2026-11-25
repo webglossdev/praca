@@ -1,0 +1,103 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SourceRule from "../../../components/SourceRule.astro";
+import { pessoas } from "../../../data/pessoas";
+
+export function getStaticPaths() {
+  return pessoas.map((pessoa) => ({ params: { slug: pessoa.slug }, props: { pessoa } }));
+}
+
+const { pessoa } = Astro.props;
+const votos = pessoa.votos_recentes ?? [];
+---
+<Layout title={`Votações de ${pessoa.nome_publico} · Praça`} description={`Histórico de votos nominais e orientações de ${pessoa.nome_publico}.`}>
+  <div class="wrap page" data-poder={pessoa.mandatos[0]?.poder}>
+    <header class="page-header">
+      <a href={`/pessoas/${pessoa.slug}`}>← Voltar ao perfil de {pessoa.nome_publico}</a>
+      <span class="eyebrow">Histórico nominal</span>
+      <h1>Votações de {pessoa.nome_publico}</h1>
+      <p class="lede">Filtre por tipo de voto ou tema e exporte os registros desta página em CSV UTF-8.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <label class="sr-only" for="escolha-filter">Filtrar por tipo de voto</label>
+        <select id="escolha-filter" class="filter-select" data-escolha-filter>
+          <option value="">Todos os votos</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+          <option value="abstencao">Abstenção</option>
+          <option value="ausente">Ausente</option>
+          <option value="obstrucao">Obstrução</option>
+        </select>
+        <label class="sr-only" for="q">Buscar proposição ou tema</label>
+        <input id="q" name="q" class="filter-select" style="flex: 1; min-width: 14rem;" type="search" autocomplete="off" placeholder="Filtrar proposição ou tema…" data-voto-search />
+        <button class="button secondary small" type="button" data-export-csv data-slug={pessoa.slug}>Exportar CSV</button>
+        <span class="muted mono" data-csv-status aria-live="polite"></span>
+      </div>
+    </div>
+
+    {votos.length > 0 ? (
+      <div class="table-wrap">
+        <table class="data-table" data-votos-table>
+          <thead>
+            <tr><th>Proposição</th><th>Tema</th><th>Data</th><th>Voto</th><th>Part.</th><th>Gov.</th><th>Resultado</th></tr>
+          </thead>
+          <tbody>
+            {votos.map((v) => (
+              <tr data-escolha={v.escolha} data-text={`${v.proposicao_label} ${v.tema} ${v.resultado}`.toLocaleLowerCase("pt-BR")}>
+                <td><a href={`/votacoes/${v.votacao_id}`}><strong>{v.proposicao_label}</strong></a></td>
+                <td>{v.tema}</td>
+                <td class="mono">{v.data}</td>
+                <td><span class={`vote-pill vote-${v.escolha}`}>{v.escolha}</span></td>
+                <td>{v.orientacao_partido ?? "—"}</td>
+                <td>{v.orientacao_governo ?? "—"}</td>
+                <td>{v.resultado}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <div class="callout">
+        <p class="muted">Este perfil não possui votações nominais em plenário registradas nesta edição.</p>
+      </div>
+    )}
+    <SourceRule fonte={pessoa.fontes[0]?.valor ?? "Casa legislativa"} coletadoEm={pessoa.fontes[0]?.coletado_em} url={pessoa.fontes[0]?.url} />
+  </div>
+</Layout>
+<script>
+  const select = document.querySelector<HTMLSelectElement>("[data-escolha-filter]");
+  const search = document.querySelector<HTMLInputElement>("[data-voto-search]");
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>("[data-votos-table] tbody tr")];
+  const exportBtn = document.querySelector<HTMLButtonElement>("[data-export-csv]");
+  const csvStatus = document.querySelector<HTMLElement>("[data-csv-status]");
+
+  const filtrar = () => {
+    const e = select?.value ?? "";
+    const q = (search?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    for (const row of rows) {
+      const ok = (!e || row.dataset.escolha === e) && (!q || (row.dataset.text ?? "").includes(q));
+      row.hidden = !ok;
+    }
+  };
+  select?.addEventListener("change", filtrar);
+  search?.addEventListener("input", filtrar);
+
+  exportBtn?.addEventListener("click", () => {
+    const visiveis = rows.filter((r) => !r.hidden);
+    const linhas = [["Proposicao", "Tema", "Data", "Voto", "Partido", "Governo", "Resultado"]];
+    for (const r of visiveis) {
+      const cols = [...r.querySelectorAll("td")].map((td) => `"${(td.textContent ?? "").trim().replaceAll('"', '""')}"`);
+      linhas.push(cols);
+    }
+    const csv = linhas.map((l) => l.join(",")).join("\n");
+    const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `votos-${exportBtn.dataset.slug || "perfil"}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    if (csvStatus) csvStatus.textContent = `CSV preparado com ${visiveis.length} registro(s).`;
+  });
+</script>

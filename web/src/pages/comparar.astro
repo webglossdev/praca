@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { pessoas } from "../data/pessoas";
+---
+<Layout title="Comparar perfis · Praça" description="Compare lado a lado cargo, partido, alinhamento, votações e patrimônio declarado de perfis públicos.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Comparador objetivo</span>
+      <h1>Comparar até 3 perfis</h1>
+      <p class="lede">Selecione perfis abaixo para comparar dados oficiais lado a lado com a mesma régua de proveniência.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div class="three-col">
+        {[0, 1, 2].map((idx) => (
+          <div class="sim-field">
+            <label for={`cmp-${idx}`}>Perfil {idx + 1}</label>
+            <select id={`cmp-${idx}`} class="filter-select" data-cmp-select={idx}>
+              <option value="">Selecionar perfil…</option>
+              {pessoas.map((p) => (
+                <option value={p.pid} selected={pessoas[idx]?.pid === p.pid}>{p.nome_publico} ({p.mandatos[0]?.cargo})</option>
+              ))}
+            </select>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Campo</th><th data-col-head="0">Perfil 1</th><th data-col-head="1">Perfil 2</th><th data-col-head="2">Perfil 3</th></tr>
+        </thead>
+        <tbody data-cmp-body></tbody>
+      </table>
+    </div>
+  </div>
+</Layout>
+<script id="cmp-data" type="application/json" set:html={JSON.stringify(pessoas)}></script>
+<script>
+  const dados = JSON.parse(document.querySelector("#cmp-data")?.textContent || "[]");
+  const selects = [...document.querySelectorAll<HTMLSelectElement>("[data-cmp-select]")];
+  const tbody = document.querySelector<HTMLElement>("[data-cmp-body]");
+
+  const params = new URLSearchParams(window.location.search);
+  const pidParam = (params.get("pids") ?? "").split(",").filter(Boolean);
+  pidParam.slice(0, 3).forEach((pid, i) => {
+    if (selects[i]) selects[i].value = pid;
+  });
+
+  const render = () => {
+    const escolhidos = selects.map((s) => dados.find((p: { pid: string }) => p.pid === s.value) || null);
+    escolhidos.forEach((p, idx) => {
+      const th = document.querySelector(`[data-col-head="${idx}"]`);
+      if (th) th.textContent = p ? p.nome_publico : `Perfil ${idx + 1}`;
+    });
+
+    const linhas: [string, (p: any) => string][] = [
+      ["Poder", (p) => p?.mandatos?.[0]?.poder ?? "—"],
+      ["Cargo", (p) => p?.mandatos?.[0]?.cargo ?? "—"],
+      ["UF", (p) => p?.mandatos?.[0]?.uf ?? "Nacional"],
+      ["Partido", (p) => p?.partido?.sigla ?? "Sem filiação"],
+      ["Status", (p) => (p?.mandatos?.[0]?.status ?? "—").replaceAll("_", " ")],
+      ["Alinhamento partidário", (p) => p?.posicionamento?.alinhamento_partido_pct != null ? `${p.posicionamento.alinhamento_partido_pct}%` : "Não aplicável"],
+      ["Alinhamento governo", (p) => p?.posicionamento?.alinhamento_governo_pct != null ? `${p.posicionamento.alinhamento_governo_pct}%` : "Não aplicável"],
+      ["Proposições na amostra", (p) => String(p?.proposicoes?.length ?? 0)],
+      ["Despesas listadas", (p) => String(p?.despesas?.length ?? 0)],
+      ["Bens declarados (itens)", (p) => String(p?.bens?.length ?? 0)],
+    ];
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    for (const [rotulo, fn] of linhas) {
+      const tr = document.createElement("tr");
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.innerHTML = `<strong>${rotulo}</strong>`;
+      tr.appendChild(th);
+      for (const p of escolhidos) {
+        const td = document.createElement("td");
+        td.textContent = p ? fn(p) : "—";
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+
+    const next = new URLSearchParams();
+    const pids = escolhidos.filter(Boolean).map((p: any) => p.pid);
+    if (pids.length) next.set("pids", pids.join(","));
+    window.history.replaceState(null, "", pids.length ? `${window.location.pathname}?${next.toString()}` : window.location.pathname);
+  };
+
+  for (const s of selects) s.addEventListener("change", render);
+  window.addEventListener("popstate", () => {
+    const current = (new URLSearchParams(window.location.search).get("pids") ?? "").split(",").filter(Boolean);
+    selects.forEach((select, index) => {
+      select.value = current[index] ?? "";
+    });
+    render();
+  });
+  render();
+</script>

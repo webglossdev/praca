@@ -1,0 +1,23 @@
+---
+interface Props {
+  fonte: string;
+  coletadoEm?: string | null;
+  url?: string | null;
+  licenca?: string;
+}
+
+const {
+  fonte,
+  coletadoEm,
+  url,
+  licenca,
+} = Astro.props;
+
+const dataCurta = coletadoEm ? coletadoEm.slice(0, 10) : null;
+---
+<footer class="source">
+  <span>Fonte: <strong>{fonte}</strong></span>
+  {dataCurta && <span>Coleta: {dataCurta}</span>}
+  {licenca && <span>Licença: {licenca}</span>}
+  {url && <a href={url} rel="noopener noreferrer" target="_blank">Fonte original ↗</a>}
+</footer>

@@ -1,0 +1,51 @@
+name: Coleta Autônoma
+
+on:
+  schedule:
+    # A cada 6 horas: Legislativo, feeds oficiais e verificação de schema
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  coletar-e-validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: latest
+      - run: uv sync
+      - name: Gerar e validar artefatos
+        run: |
+          uv run python scripts/gerar_fontes.py
+          uv run python scripts/gerar_schema.py
+          uv run python scripts/validar_dados.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - name: Publicar alterações verificadas
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/publico/fontes.json schema/pessoa.schema.json web/dist
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: atualizar snapshots e build público"
+            git push
+          fi
+      - name: Abrir alerta automático em falha de coletor/validação
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "[coleta-autonoma] Falha na validação ou build" \
+            --body "O workflow automático detectou falha na execução \`${{ github.run_id }}\`. O último snapshot válido permanece em cache ou na revisão anterior." \
+            --label "fonte-quebrada"

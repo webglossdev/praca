@@ -1,0 +1,64 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Metodologia · Praça" description="Como coletamos, validamos e exibimos dados políticos sem inferência partidária e respeitando direitos autorais.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Transparência metodológica</span>
+      <h1>Como os dados chegam até aqui</h1>
+      <p class="lede">A Praça publica dados públicos com fonte, data de coleta e link para a origem. Não atribuímos opiniões por inferência nem republicamos conteúdo jornalístico protegido sem licença.</p>
+    </header>
+
+    <section class="section">
+      <div class="cards">
+        <article class="card">
+          <span class="eyebrow">Regra 01</span>
+          <h2>Fontes oficiais primeiro</h2>
+          <p class="muted">APIs e bases oficiais (Câmara, Senado, TSE, CGU, STF, Receita/QSA e DOU) têm prioridade sobre fontes secundárias. Todo dado carrega URL, data ISO 8601 e licença.</p>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Regra 02</span>
+          <h2>Sem dado também é dado</h2>
+          <p class="muted">Campos ausentes aparecem explicitamente como sem registro disponível. Nunca preenchemos lacunas por estimativa ou interpolação oculta.</p>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Regra 03</span>
+          <h2>Vinculação anti-homônimo</h2>
+          <p class="muted">Notícias só são vinculadas automaticamente a um perfil quando nome completo ou apelido + UF + contexto político alcançam confiança matemática ≥ 0,95.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="posicionamento">
+      <div class="section-heading">
+        <h2>Como tratamos posicionamento político</h2>
+      </div>
+      <div class="callout">
+        <strong>Zero inferência ideológica</strong>
+        <p class="muted">A Praça nunca classifica uma pessoa como “esquerda”, “centro” ou “direita” por heurística ou opinião editorial. Exibimos apenas: (1) autodeclaração datada, (2) índice percentual objetivo de votos coincidentes com a orientação do partido e do governo (via <code>calcular_indice_alinhamento</code>), e (3) notas metodológicas publicadas por fontes acadêmicas identificadas.</p>
+      </div>
+    </section>
+
+    <section class="section" id="quarentena">
+      <div class="section-heading">
+        <h2>Quarentena de seções sensíveis e direitos autorais</h2>
+      </div>
+      <div class="two-col">
+        <article class="card">
+          <h3>Seções jurídicas e imprensa</h3>
+          <p class="muted">A exibição pública de atribuições de investigações ou processos reportados pela imprensa fica desligada por padrão (<code>SECOES_SENSIVEIS_ATIVAS = false</code>) até revisão jurídica independente. Desfechos absolutórios ou de arquivamento recebem prioridade de atualização no pipeline.</p>
+        </article>
+        <article class="card">
+          <h3>Imprensa × Agências oficiais</h3>
+          <p class="muted">Veículos de imprensa de terceiros exibem apenas título, veículo, data, trecho curto (máximo de 500 caracteres) e link externo. Somente publicações oficiais sob licença aberta (como Agência Brasil CC BY 3.0 BR, Agência Câmara e Agência Senado) podem exibir texto integral com atribuição.</p>
+        </article>
+      </div>
+    </section>
+
+    <p class="card-actions">
+      <a class="button secondary" href="/downloads/pessoas.json">Baixar dados de pessoas (JSON)</a>
+      <a class="button secondary" href="/status">Ver status das fontes →</a>
+      <a class="button secondary" href="/corrigir">Reportar erro com fonte</a>
+    </p>
+  </div>
+</Layout>

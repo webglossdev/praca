@@ -1,0 +1,57 @@
+{
+  "emSessao": false,
+  "atualizadoEm": "2026-10-05T12:00:00Z",
+  "eventos": [
+    {
+      "id": "ev-camara-plen-01",
+      "poder": "legislativo",
+      "orgao": "Câmara — Plenário Ulysses Guimarães",
+      "titulo": "Sessão Deliberativa Extraordinária — Pauta de Educação e Finanças",
+      "status": "agendado",
+      "horario": "14:00 (Brasília)",
+      "pauta": "Análise do PL 1042/2026 e destaques de redação final.",
+      "youtube_id": "jfKfPfyJRdk",
+      "fonte": {
+        "valor": "Agenda oficial da Câmara",
+        "fonte_id": "camara",
+        "url": "https://dadosabertos.camara.leg.br/api/v2/eventos",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    {
+      "id": "ev-senado-ccj-01",
+      "poder": "legislativo",
+      "orgao": "Senado — Comissão de Constituição e Justiça",
+      "titulo": "Reunião deliberativa sobre pacto federativo",
+      "status": "agendado",
+      "horario": "10:00 (Brasília)",
+      "pauta": "Discussão de emendas à PEC 10/2026.",
+      "youtube_id": null,
+      "fonte": {
+        "valor": "Agenda do Senado Federal",
+        "fonte_id": "senado",
+        "url": "https://legis.senado.leg.br/dadosabertos",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    },
+    {
+      "id": "ev-stf-plen-01",
+      "poder": "judiciario",
+      "orgao": "STF — Sessão Plenária",
+      "titulo": "Julgamento de Arguição de Descumprimento de Preceito Fundamental",
+      "status": "agendado",
+      "horario": "14:30 (Brasília)",
+      "pauta": "Pauta publicada no Diário da Justiça Eletrônico.",
+      "youtube_id": null,
+      "fonte": {
+        "valor": "Pauta oficial do STF",
+        "fonte_id": "stf",
+        "url": "https://portal.stf.jus.br",
+        "coletado_em": "2026-10-05T12:00:00Z",
+        "licenca": "dados públicos"
+      }
+    }
+  ]
+}

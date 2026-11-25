@@ -1,0 +1,147 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { glossarioTermos, type CategoriaGlossario } from "../data/educacao";
+
+const categorias: { id: "todas" | CategoriaGlossario; label: string }[] = [
+  { id: "todas", label: "Todos" },
+  { id: "legislativo", label: "Legislativo" },
+  { id: "orcamento", label: "Orçamento" },
+  { id: "eleicoes", label: "Eleições e Partidos" },
+  { id: "justica", label: "Justiça e Status Processual" },
+  { id: "cidadania", label: "Cidadania" },
+];
+
+const termosOrdenados = [...glossarioTermos].sort((a, b) => a.termo.localeCompare(b.termo, "pt-BR"));
+---
+<Layout
+  title="Glossário · Praça"
+  description="Dicionário direto de termos políticos, orçamentários, eleitorais e jurídicos para ler notícias e dados públicos sem juridiquês."
+>
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Sem juridiquês</span>
+      <h1>Glossário cívico, orçamentário e jurídico</h1>
+      <p class="lede">
+        O significado objetivo das palavras que mais aparecem em votações, reportagens, pesquisas eleitorais e processos judiciais — com exemplo prático e fonte oficial.
+      </p>
+    </header>
+
+    <div class="callout" data-poder="judiciario" style="margin-bottom: var(--s-6)">
+      <span class="eyebrow">Leitura crítica de notícias</span>
+      <h2>Atenção especial: status judicial não é sinônimo</h2>
+      <p class="muted">
+        “Investigado em inquérito”, “réu”, “condenado em 1ª instância”, “decisão liminar” e “trânsito em julgado” descrevem momentos completamente diferentes. Use a categoria <strong>Justiça e Status Processual</strong> abaixo sempre que ler uma notícia sobre processos envolvendo agentes públicos.
+      </p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-pills" role="group" aria-label="Filtrar termos por categoria">
+        {categorias.map((cat, index) => (
+          <button
+            class="pill-button"
+            type="button"
+            data-glossario-filter={cat.id}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+      <div class="search-form" role="search">
+        <label class="sr-only" for="glossario-search">Buscar termo no glossário</label>
+        <input
+          id="glossario-search"
+          type="search"
+          placeholder="Buscar termo: PEC, Quociente, Réu, Liminar, FPM, LAI..."
+          data-glossario-search
+        />
+      </div>
+    </div>
+
+    <p class="muted mono" style="margin-bottom: var(--s-4)" data-glossario-count>
+      {termosOrdenados.length} verbetes encontrados.
+    </p>
+
+    <div class="two-col" data-glossario-grid>
+      {termosOrdenados.map((item) => (
+        <article
+          class="card glossary-card"
+          id={item.slug}
+          data-glossario-item
+          data-categoria={item.categoria}
+          data-poder={item.categoria === "legislativo" ? "legislativo" : item.categoria === "justica" ? "judiciario" : undefined}
+          data-search={`${item.termo} ${item.categoriaLabel} ${item.emUmaFrase} ${item.explicacao} ${item.exemploPratico}`.toLocaleLowerCase("pt-BR")}
+        >
+          <span class="tag">{item.categoriaLabel}</span>
+          <h2>{item.termo}</h2>
+          <p><strong>Em uma frase:</strong> {item.emUmaFrase}</p>
+          <p>{item.explicacao}</p>
+          <p class="muted"><strong>Exemplo prático:</strong> {item.exemploPratico}</p>
+          <div class="source">
+            <span>FONTE · {item.fonte.orgao}</span>
+            <span>{item.fonte.coletado_em}</span>
+            <a href={item.fonte.url} target="_blank" rel="noreferrer">Abrir fonte ↗</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="card" hidden data-glossario-empty style="margin-top: var(--s-4)">
+      Nenhum verbete corresponde a essa busca.
+    </p>
+  </div>
+</Layout>
+
+<script>
+  const pills = [...document.querySelectorAll<HTMLButtonElement>("[data-glossario-filter]")];
+  const search = document.querySelector<HTMLInputElement>("[data-glossario-search]");
+  const items = [...document.querySelectorAll<HTMLElement>("[data-glossario-grid] [data-glossario-item]")];
+  const count = document.querySelector<HTMLElement>("[data-glossario-count]");
+  const empty = document.querySelector<HTMLElement>("[data-glossario-empty]");
+
+  let activeCategoria = "todas";
+
+  const syncUrl = (query: string) => {
+    const next = new URLSearchParams();
+    if (activeCategoria !== "todas") next.set("categoria", activeCategoria);
+    if (query) next.set("q", query);
+    const qs = next.toString();
+    window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  };
+
+  const applyFilter = () => {
+    const query = (search?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    let visible = 0;
+
+    for (const item of items) {
+      const cat = item.dataset.categoria ?? "";
+      const haystack = item.dataset.search ?? "";
+      const show = (activeCategoria === "todas" || cat === activeCategoria) && (!query || haystack.includes(query));
+      item.hidden = !show;
+      if (show) visible += 1;
+    }
+
+    if (count) count.textContent = `${visible} ${visible === 1 ? "verbete encontrado" : "verbetes encontrados"}.`;
+    if (empty) empty.hidden = visible > 0;
+    syncUrl(search?.value.trim() ?? "");
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  activeCategoria = params.get("categoria") ?? "todas";
+  if (search && params.has("q")) search.value = params.get("q") ?? "";
+  for (const pill of pills) {
+    pill.setAttribute("aria-pressed", String((pill.dataset.glossarioFilter ?? "todas") === activeCategoria));
+  }
+  applyFilter();
+
+  for (const pill of pills) {
+    pill.addEventListener("click", () => {
+      activeCategoria = pill.dataset.glossarioFilter ?? "todas";
+      for (const item of pills) {
+        item.setAttribute("aria-pressed", String(item === pill));
+      }
+      applyFilter();
+    });
+  }
+
+  search?.addEventListener("input", applyFilter);
+</script>

@@ -1,0 +1,50 @@
+- id: agencia-brasil
+  nome: Agência Brasil (EBC)
+  url: https://agenciabrasil.ebc.com.br
+  licenca: CC BY 3.0 BR (crédito obrigatório; link canônico)
+  frequencia: quatro vezes ao dia
+- id: agencia-camara
+  nome: Agência Câmara de Notícias
+  url: https://www.camara.leg.br/noticias
+  licenca: uso livre com citação da fonte e link canônico
+  frequencia: de hora em hora
+- id: agencia-senado
+  nome: Agência Senado
+  url: https://www12.senado.leg.br/noticias
+  licenca: uso livre com citação da fonte e link canônico
+  frequencia: de hora em hora
+- id: camara
+  nome: Dados Abertos da Câmara dos Deputados
+  url: https://dadosabertos.camara.leg.br
+  licenca: dados públicos; termos da fonte
+  frequencia: duas vezes ao dia
+- id: cgu-transparencia
+  nome: Portal da Transparência (CGU)
+  url: https://portaldatransparencia.gov.br
+  licenca: dados públicos; API com chave gratuita cadastrada
+  frequencia: diária
+- id: dou
+  nome: Diário Oficial da União (INLABS / Imprensa Nacional)
+  url: https://www.in.gov.br
+  licenca: dados oficiais públicos
+  frequencia: diária (dias úteis)
+- id: receita-cnpj
+  nome: Cadastro Nacional da Pessoa Jurídica / QSA (Receita Federal)
+  url: https://dados.gov.br
+  licenca: dados públicos; CPF de sócios sempre mascarado conforme origem
+  frequencia: mensal
+- id: senado
+  nome: Dados Abertos do Senado Federal
+  url: https://legis.senado.leg.br/dadosabertos
+  licenca: dados públicos; termos da fonte
+  frequencia: duas vezes ao dia
+- id: stf
+  nome: Supremo Tribunal Federal (Portal / Corte Aberta / DataJud CNJ)
+  url: https://portal.stf.jus.br
+  licenca: dados públicos; DataJud com chave pública CNJ
+  frequencia: diária
+- id: tse
+  nome: Tribunal Superior Eleitoral (Repositório e DivulgaCandContas)
+  url: https://dadosabertos.tse.jus.br
+  licenca: dados públicos; termos da fonte
+  frequencia: por evento eleitoral e atualização mensal de filiações

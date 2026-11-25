@@ -1,0 +1,64 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SourceRule from "../../components/SourceRule.astro";
+import { pessoas } from "../../data/pessoas";
+import { votacoes } from "../../data/portal";
+
+export function getStaticPaths() {
+  return votacoes.map((votacao) => ({ params: { id: votacao.id }, props: { votacao } }));
+}
+
+const { votacao } = Astro.props;
+const contagem = {
+  sim: votacao.votos.filter((v) => v.escolha === "sim").length,
+  nao: votacao.votos.filter((v) => v.escolha === "nao").length,
+  outros: votacao.votos.filter((v) => v.escolha !== "sim" && v.escolha !== "nao").length,
+};
+const slugPorPid = new Map(pessoas.map((p) => [p.pid, p.slug]));
+---
+<Layout title={`${votacao.proposicao_label ?? votacao.id} · Votação · Praça`} description={votacao.titulo ?? votacao.resultado}>
+  <div class="wrap page" data-poder="legislativo">
+    <header class="page-header">
+      <a href="/pessoas">← Voltar ao observatório</a>
+      <span class="eyebrow">Votação nominal · {votacao.casa}</span>
+      <h1>{votacao.proposicao_label ?? votacao.proposicao_id}</h1>
+      <p class="lede">{votacao.titulo ?? "Registro nominal de votação em plenário."}</p>
+      <div class="profile-meta">
+        <span class="tag">{votacao.resultado}</span>
+        {votacao.tema && <span class="tag">{votacao.tema}</span>}
+        <span class="tag">{votacao.data}</span>
+      </div>
+    </header>
+
+    <section class="facts" style="margin-bottom: var(--s-6);">
+      <div class="fact"><strong>{contagem.sim}</strong><span>votos Sim registrados na amostra</span></div>
+      <div class="fact"><strong>{contagem.nao}</strong><span>votos Não registrados na amostra</span></div>
+      <div class="fact"><strong>{contagem.outros}</strong><span>abstenções / ausências / obstruções</span></div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <h2>Votos nominais desta edição</h2>
+        <span class="muted">{votacao.votos.length} voto(s)</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Parlamentar</th><th>Partido / UF</th><th>Voto</th></tr></thead>
+          <tbody>
+            {votacao.votos.map((v) => {
+              const slug = slugPorPid.get(v.pid);
+              return (
+                <tr>
+                  <td>{slug ? <a href={`/pessoas/${slug}`}><strong>{v.nome ?? v.pid}</strong></a> : (v.nome ?? v.pid)}</td>
+                  <td class="muted">{v.partido ?? "—"} {v.uf ? `(${v.uf})` : ""}</td>
+                  <td><span class={`vote-pill vote-${v.escolha}`}>{v.escolha}</span></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <SourceRule fonte={`Dados Abertos (${votacao.casa ?? "Congresso"})`} coletadoEm={votacao.data} url={votacao.url} />
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,409 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {
+  esferasFederativas,
+  situacoesCotidianas,
+  etapasCicloLei,
+  tiposProposicao,
+  pilaresOrcamento,
+  regrasEleitorais,
+  guiaPorPoder,
+} from "../../data/educacao";
+---
+<Layout
+  title="Como funciona o Brasil · Praça"
+  description="Guia didático e interativo sobre Pacto Federativo, Três Poderes, ciclo das leis, orçamento público, eleições e auditoria da urna eletrônica."
+>
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Educação cívica · sem partidarismo</span>
+      <h1>Como funciona o Brasil, na prática</h1>
+      <p class="lede">
+        Entenda quem decide o quê no seu dia a dia (Município, Estado e União), como um projeto vira lei, para onde vai o orçamento e como funcionam as eleições — sempre com a regra constitucional e a fonte oficial abaixo de cada bloco.
+      </p>
+      <nav class="toc-bar" aria-label="Atalhos desta página">
+        <a class="pill-button" href="#quem-faz-o-que">1. Quem faz o quê</a>
+        <a class="pill-button" href="#tres-poderes">2. Três Poderes</a>
+        <a class="pill-button" href="#como-nasce-uma-lei">3. Como nasce uma lei</a>
+        <a class="pill-button" href="#orcamento">4. Orçamento público</a>
+        <a class="pill-button" href="#eleicoes-e-urna">5. Eleições e urna</a>
+      </nav>
+    </header>
+
+    <section class="section" id="quem-faz-o-que" aria-labelledby="federacao-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Pacto federativo</span>
+          <h2 id="federacao-title">1. Quem faz o quê: Município, Estado e União</h2>
+        </div>
+        <a href="/guia-do-cidadao">Ir para o Guia do Cidadão →</a>
+      </div>
+      <div class="three-col">
+        {esferasFederativas.map((esfera) => (
+          <article class="card">
+            <span class="eyebrow">{esfera.nome}</span>
+            <h3>{esfera.subtitulo}</h3>
+            <p><strong>Executivo:</strong> {esfera.executivo}</p>
+            <p><strong>Legislativo:</strong> {esfera.legislativo}</p>
+            <p><strong>Principais responsabilidades:</strong></p>
+            <ul class="bullet-list">
+              {esfera.responsabilidadesPrincipais.map((item) => <li>{item}</li>)}
+            </ul>
+            <p class="muted"><strong>Impostos próprios:</strong> {esfera.impostosProprios.join(" · ")}</p>
+            <p class="muted"><strong>Quem fiscaliza:</strong> {esfera.quemFiscaliza}</p>
+            <div class="source">
+              <span>FONTE · {esfera.fonte.orgao}</span>
+              <span>{esfera.fonte.coletado_em}</span>
+              <a href={esfera.fonte.url} target="_blank" rel="noreferrer">Constituição ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div style="margin-top: var(--s-6)">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Bússola federativa interativa</span>
+            <h3>Tenho um problema ou dúvida: quem responde por isso?</h3>
+          </div>
+          <span class="muted mono" data-bussola-count aria-live="polite">{situacoesCotidianas.length} situações</span>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-pills" role="group" aria-label="Filtrar por esfera de governo">
+            <button class="pill-button" type="button" data-esfera-filter="todas" aria-pressed="true">Todas as esferas</button>
+            <button class="pill-button" type="button" data-esfera-filter="municipio" aria-pressed="false">Município</button>
+            <button class="pill-button" type="button" data-esfera-filter="estado" aria-pressed="false">Estado / DF</button>
+            <button class="pill-button" type="button" data-esfera-filter="uniao" aria-pressed="false">União</button>
+            <button class="pill-button" type="button" data-esfera-filter="compartilhada" aria-pressed="false">Compartilhada</button>
+          </div>
+          <div class="search-form" role="search">
+            <label class="sr-only" for="bussola-search">Buscar situação cotidiana</label>
+            <input
+              id="bussola-search"
+              name="q"
+              type="search"
+              autocomplete="off"
+              placeholder="Digite um tema: buraco, posto de saúde, escola, polícia, imposto, INSS, STF..."
+              data-bussola-search
+            />
+          </div>
+        </div>
+
+        <div class="two-col" data-bussola-grid>
+          {situacoesCotidianas.map((item) => (
+            <article
+              class="card situacao-card"
+              data-situacao
+              data-esfera={item.esfera}
+              data-poder={item.poderPrincipal !== "multiplo" ? item.poderPrincipal : undefined}
+              data-search={`${item.pergunta} ${item.categoria} ${item.esferaLabel} ${item.palavrasChave}`.toLocaleLowerCase("pt-BR")}
+            >
+              <div class="profile-meta">
+                <span class="tag">{item.esferaLabel}</span>
+                <span class="eyebrow">{item.categoria}</span>
+              </div>
+              <h3>{item.pergunta}</h3>
+              <p><strong>Quem executa:</strong> {item.quemExecuta}</p>
+              <p><strong>Quem fiscaliza:</strong> {item.quemFiscaliza}</p>
+              <p><strong>Como cobrar na prática:</strong> {item.comoCobrar}</p>
+              <div class="source">
+                <span>FONTE · {item.fonte.orgao}</span>
+                <a href={item.fonte.url} target="_blank" rel="noreferrer">Referência ↗</a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="card" hidden data-bussola-empty style="margin-top: var(--s-4)">
+          Nenhuma situação encontrada com esse filtro. Tente palavras como “saúde”, “escola”, “polícia” ou “imposto”.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="tres-poderes" aria-labelledby="poderes-edu-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Equilíbrio institucional</span>
+          <h2 id="poderes-edu-title">2. Os Três Poderes e o que cada um NÃO faz</h2>
+        </div>
+        <a href="/pessoas">Explorar agentes por Poder →</a>
+      </div>
+      <div class="three-col">
+        {Object.values(guiaPorPoder).map((poder) => (
+          <article class="card" data-poder={poder.id}>
+            <span class="eyebrow">Cor na Praça: {poder.corNome}</span>
+            <h3>Poder {poder.nome}</h3>
+            <p class="muted">{poder.quemIntegra}</p>
+            <p><strong>Missão:</strong> {poder.missaoConstitucional}</p>
+            <p><strong>O que faz:</strong></p>
+            <ul class="bullet-list">
+              {poder.oQueFaz.map((acao) => <li>{acao}</li>)}
+            </ul>
+            <p><strong>O que NÃO faz:</strong></p>
+            <ul class="bullet-list">
+              {poder.oQueNaoFaz.map((limite) => <li>{limite}</li>)}
+            </ul>
+            <p class="muted"><strong>Como fiscalizar:</strong> {poder.comoFiscalizar}</p>
+            <div class="card-actions">
+              <a class="button secondary small" href={`/poderes/${poder.id}`}>Ver {poder.nome} na Praça →</a>
+            </div>
+            <div class="source">
+              <span>FONTE · {poder.fonte.orgao}</span>
+              <a href={poder.fonte.url} target="_blank" rel="noreferrer">Abrir fonte ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="como-nasce-uma-lei" aria-labelledby="lei-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Processo legislativo</span>
+          <h2 id="lei-title">3. Do rascunho ao Diário Oficial: como nasce uma lei</h2>
+        </div>
+        <a href="/glossario#pec">Ver termos no Glossário →</a>
+      </div>
+      <div class="step-list">
+        {etapasCicloLei.map((etapa) => (
+          <article class="step-card" data-poder="legislativo">
+            <div class="step-head">
+              <span class="step-num">{etapa.ordem}</span>
+              <h3>{etapa.titulo}</h3>
+            </div>
+            <p><strong>Regra geral:</strong> {etapa.resumo}</p>
+            <p class="muted"><strong>Na prática:</strong> {etapa.detalhePratico}</p>
+            <div class="source">
+              <span>FONTE · {etapa.fonte.orgao}</span>
+              <span>{etapa.fonte.coletado_em}</span>
+              <a href={etapa.fonte.url} target="_blank" rel="noreferrer">Fonte oficial ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div style="margin-top: var(--s-6)">
+        <h3 style="margin-bottom: var(--s-3)">PL, PLP, PEC ou Medida Provisória? Compare rápido</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Para que serve</th>
+                <th>O que precisa para aprovar</th>
+                <th>Sanção ou veto presidencial</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tiposProposicao.map((tipo) => (
+                <tr>
+                  <td><strong>{tipo.sigla}</strong><br /><span class="muted">{tipo.nome}</span></td>
+                  <td>{tipo.paraQueServe}</td>
+                  <td>{tipo.quorumAprovacao}</td>
+                  <td>{tipo.temSancaoPresidencial}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="source" style="margin-top: var(--s-2)">
+          <span>FONTE · Constituição Federal (Arts. 59 a 69) e Câmara dos Deputados</span>
+          <span>{tiposProposicao[0].fonte.coletado_em}</span>
+          <a href={tiposProposicao[0].fonte.url} target="_blank" rel="noreferrer">Portal da Câmara ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="orcamento" aria-labelledby="orcamento-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">O cofre público</span>
+          <h2 id="orcamento-title">4. Orçamento público, gastos obrigatórios e emendas</h2>
+        </div>
+        <a href="/glossario#ppa-ldo-loa">Entender siglas do orçamento →</a>
+      </div>
+      <div class="two-col">
+        {pilaresOrcamento.map((pilar) => (
+          <article class="card">
+            <span class="eyebrow">{pilar.sigla}</span>
+            <h3>{pilar.titulo}</h3>
+            <p>{pilar.resumo}</p>
+            <p class="muted"><strong>Na prática:</strong> {pilar.naPratica}</p>
+            <div class="source">
+              <span>FONTE · {pilar.fonte.orgao}</span>
+              <span>{pilar.fonte.coletado_em}</span>
+              <a href={pilar.fonte.url} target="_blank" rel="noreferrer">Abrir portal ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="eleicoes-e-urna" aria-labelledby="eleicoes-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Sistema eleitoral</span>
+          <h2 id="eleicoes-title">5. Como funcionam as eleições e a auditoria da urna</h2>
+        </div>
+        <a href="/glossario#quociente-eleitoral">Ver Quociente e BU no Glossário →</a>
+      </div>
+
+      <div class="step-list" style="margin-bottom: var(--s-6)">
+        {regrasEleitorais.map((regra) => (
+          <article class="step-card">
+            <h3>{regra.titulo}</h3>
+            <p>{regra.resumo}</p>
+            <ul class="bullet-list">
+              {regra.comoFunciona.map((ponto) => <li>{ponto}</li>)}
+            </ul>
+            <div class="source">
+              <span>FONTE · {regra.fonte.orgao}</span>
+              <span>{regra.fonte.coletado_em}</span>
+              <a href={regra.fonte.url} target="_blank" rel="noreferrer">Portal do TSE ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="sim-box" data-qe-sim>
+        <div>
+          <span class="eyebrow">Simulador didático · Código Eleitoral, Arts. 106 e 107</span>
+          <h3>Calcule o Quociente Eleitoral na prática</h3>
+          <p class="muted" style="margin-top: var(--s-1)">
+            Teste como os votos válidos de um estado ou município são transformados em cadeiras para partidos ou federações na eleição proporcional (deputados e vereadores).
+          </p>
+        </div>
+        <div class="sim-inputs">
+          <div class="sim-field">
+            <label for="sim-validos">Votos válidos totais</label>
+            <input id="sim-validos" type="number" min="100" step="1000" value="1000000" data-sim-validos />
+          </div>
+          <div class="sim-field">
+            <label for="sim-vagas">Vagas em disputa</label>
+            <input id="sim-vagas" type="number" min="1" max="100" step="1" value="20" data-sim-vagas />
+          </div>
+          <div class="sim-field">
+            <label for="sim-partido">Votos do partido / federação</label>
+            <input id="sim-partido" type="number" min="0" step="1000" value="165000" data-sim-partido />
+          </div>
+        </div>
+        <div class="sim-results" aria-live="polite">
+          <div class="fact">
+            <strong data-out-qe>50.000</strong>
+            <span>Quociente Eleitoral (votos por vaga)</span>
+          </div>
+          <div class="fact">
+            <strong data-out-qp>3</strong>
+            <span>Vagas diretas (Quociente Partidário)</span>
+          </div>
+          <div class="fact">
+            <strong data-out-min>5.000</strong>
+            <span>Mínimo de 10% do QE por candidato eleito</span>
+          </div>
+        </div>
+        <p class="muted">
+          As cadeiras não preenchidas na divisão direta ("sobras") são distribuídas na etapa seguinte conforme as regras de médias e cláusulas de desempenho do Código Eleitoral.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="callout">
+        <span class="eyebrow">Próximo passo</span>
+        <h2>Agora que você conhece as regras, saiba onde agir</h2>
+        <p class="muted">
+          Veja o passo a passo gratuito para propor ideias de lei no e-Cidadania, pedir documentos via LAI no Fala.BR, acionar ouvidorias locais ou consultar perfis públicos reais na Praça.
+        </p>
+        <div class="card-actions">
+          <a class="button" href="/guia-do-cidadao">Abrir Guia do Cidadão</a>
+          <a class="button secondary" href="/glossario">Consultar Glossário A–Z</a>
+          <a class="button secondary" href="/pessoas">Explorar perfis públicos</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const pills = [...document.querySelectorAll<HTMLButtonElement>("[data-esfera-filter]")];
+  const searchInput = document.querySelector<HTMLInputElement>("[data-bussola-search]");
+  const situacoes = [...document.querySelectorAll<HTMLElement>("[data-bussola-grid] [data-situacao]")];
+  const countEl = document.querySelector<HTMLElement>("[data-bussola-count]");
+  const emptyEl = document.querySelector<HTMLElement>("[data-bussola-empty]");
+
+  let activeEsfera = "todas";
+
+  const params = new URLSearchParams(window.location.search);
+  activeEsfera = params.get("esfera") ?? "todas";
+  if (searchInput && params.has("q")) searchInput.value = params.get("q") ?? "";
+  for (const pill of pills) {
+    pill.setAttribute("aria-pressed", String((pill.dataset.esferaFilter ?? "todas") === activeEsfera));
+  }
+
+  const applyBussolaFilter = () => {
+    const query = (searchInput?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    let visible = 0;
+
+    for (const card of situacoes) {
+      const esfera = card.dataset.esfera ?? "";
+      const haystack = card.dataset.search ?? "";
+      const matchesEsfera = activeEsfera === "todas" || esfera === activeEsfera;
+      const matchesQuery = !query || haystack.includes(query);
+      const show = matchesEsfera && matchesQuery;
+      card.hidden = !show;
+      if (show) visible += 1;
+    }
+
+    if (countEl) {
+      countEl.textContent = `${visible} ${visible === 1 ? "situação" : "situações"}`;
+    }
+    if (emptyEl) {
+      emptyEl.hidden = visible > 0;
+    }
+    const next = new URLSearchParams();
+    if (activeEsfera !== "todas") next.set("esfera", activeEsfera);
+    if (searchInput?.value.trim()) next.set("q", searchInput.value.trim());
+    const qs = next.toString();
+    window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  };
+
+  for (const pill of pills) {
+    pill.addEventListener("click", () => {
+      activeEsfera = pill.dataset.esferaFilter ?? "todas";
+      for (const item of pills) {
+        item.setAttribute("aria-pressed", String(item === pill));
+      }
+      applyBussolaFilter();
+    });
+  }
+
+  searchInput?.addEventListener("input", applyBussolaFilter);
+
+  const validosInput = document.querySelector<HTMLInputElement>("[data-sim-validos]");
+  const vagasInput = document.querySelector<HTMLInputElement>("[data-sim-vagas]");
+  const partidoInput = document.querySelector<HTMLInputElement>("[data-sim-partido]");
+  const outQe = document.querySelector<HTMLElement>("[data-out-qe]");
+  const outQp = document.querySelector<HTMLElement>("[data-out-qp]");
+  const outMin = document.querySelector<HTMLElement>("[data-out-min]");
+
+  const formatInt = (num: number) => Math.max(0, Math.trunc(num)).toLocaleString("pt-BR");
+
+  const updateSimulator = () => {
+    const validos = Math.max(1, Number(validosInput?.value || 0));
+    const vagas = Math.max(1, Number(vagasInput?.value || 1));
+    const partido = Math.max(0, Number(partidoInput?.value || 0));
+
+    const qe = Math.max(1, Math.round(validos / vagas));
+    const qp = Math.floor(partido / qe);
+    const minCandidato = Math.ceil(qe * 0.1);
+
+    if (outQe) outQe.textContent = formatInt(qe);
+    if (outQp) outQp.textContent = formatInt(qp);
+    if (outMin) outMin.textContent = formatInt(minCandidato);
+  };
+
+  validosInput?.addEventListener("input", updateSimulator);
+  vagasInput?.addEventListener("input", updateSimulator);
+  partidoInput?.addEventListener("input", updateSimulator);
+  updateSimulator();
+</script>

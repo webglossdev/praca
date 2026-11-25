@@ -1,0 +1,62 @@
+[
+  {
+    "id": "vot-cam-2026-01",
+    "proposicao_id": "20261042",
+    "data": "2026-10-02",
+    "resultado": "Aprovada (278 x 194)",
+    "casa": "camara",
+    "proposicao_label": "PL 1042/2026",
+    "titulo": "Transparência ativa em convênios federais com consórcios intermunicipais",
+    "tema": "Transparência pública",
+    "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/vot-cam-2026-01",
+    "votos": [
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "escolha": "sim",
+        "nome": "Fulana de Tal",
+        "partido": "XYZ",
+        "uf": "UF"
+      }
+    ]
+  },
+  {
+    "id": "vot-cam-2026-02",
+    "proposicao_id": "20260048",
+    "data": "2026-09-18",
+    "resultado": "Rejeitada (210 x 252)",
+    "casa": "camara",
+    "proposicao_label": "PLP 48/2026",
+    "titulo": "Revisão de metas fiscais de custeio obrigatório da União",
+    "tema": "Responsabilidade fiscal",
+    "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/vot-cam-2026-02",
+    "votos": [
+      {
+        "pid": "pid_fulana-de-tal-uf",
+        "escolha": "nao",
+        "nome": "Fulana de Tal",
+        "partido": "XYZ",
+        "uf": "UF"
+      }
+    ]
+  },
+  {
+    "id": "vot-sen-2026-01",
+    "proposicao_id": "20260010",
+    "data": "2026-09-25",
+    "resultado": "Aprovada (49 x 24)",
+    "casa": "senado",
+    "proposicao_label": "PEC 10/2026",
+    "titulo": "Partilha federativa de compensações ambientais",
+    "tema": "Pacto federativo",
+    "url": "https://legis.senado.leg.br/dadosabertos/votacao.json",
+    "votos": [
+      {
+        "pid": "pid_rafael-cardoso-rj",
+        "escolha": "sim",
+        "nome": "Rafael Cardoso",
+        "partido": "DEF",
+        "uf": "RJ"
+      }
+    ]
+  }
+]

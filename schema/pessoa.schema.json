@@ -1,0 +1,1025 @@
+{
+  "$defs": {
+    "Atribuicao": {
+      "additionalProperties": false,
+      "properties": {
+        "noticia_id": {
+          "title": "Noticia Id",
+          "type": "string"
+        },
+        "rotulo": {
+          "default": "Segundo a imprensa",
+          "title": "Rotulo",
+          "type": "string"
+        },
+        "desfecho": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Desfecho"
+        },
+        "atualizado_em": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Atualizado Em"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "titulo_noticia": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Titulo Noticia"
+        },
+        "veiculo": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Veiculo"
+        },
+        "data": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "noticia_id"
+      ],
+      "title": "Atribuicao",
+      "type": "object"
+    },
+    "Bem": {
+      "additionalProperties": false,
+      "properties": {
+        "pid": {
+          "title": "Pid",
+          "type": "string"
+        },
+        "descricao": {
+          "title": "Descricao",
+          "type": "string"
+        },
+        "valor": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Valor"
+        },
+        "ano_eleitoral": {
+          "title": "Ano Eleitoral",
+          "type": "integer"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_Decimal_"
+        }
+      },
+      "required": [
+        "pid",
+        "descricao",
+        "valor",
+        "ano_eleitoral",
+        "fonte"
+      ],
+      "title": "Bem",
+      "type": "object"
+    },
+    "Despesa": {
+      "additionalProperties": false,
+      "properties": {
+        "pid": {
+          "title": "Pid",
+          "type": "string"
+        },
+        "categoria": {
+          "title": "Categoria",
+          "type": "string"
+        },
+        "valor": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Valor"
+        },
+        "competencia": {
+          "format": "date",
+          "title": "Competencia",
+          "type": "string"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_Decimal_"
+        }
+      },
+      "required": [
+        "pid",
+        "categoria",
+        "valor",
+        "competencia",
+        "fonte"
+      ],
+      "title": "Despesa",
+      "type": "object"
+    },
+    "Doacao": {
+      "additionalProperties": false,
+      "properties": {
+        "candidato_pid": {
+          "title": "Candidato Pid",
+          "type": "string"
+        },
+        "doador": {
+          "title": "Doador",
+          "type": "string"
+        },
+        "valor": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Valor"
+        },
+        "ano_eleitoral": {
+          "title": "Ano Eleitoral",
+          "type": "integer"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_Decimal_"
+        }
+      },
+      "required": [
+        "candidato_pid",
+        "doador",
+        "valor",
+        "ano_eleitoral",
+        "fonte"
+      ],
+      "title": "Doacao",
+      "type": "object"
+    },
+    "Emenda": {
+      "additionalProperties": false,
+      "properties": {
+        "parlamentar_pid": {
+          "title": "Parlamentar Pid",
+          "type": "string"
+        },
+        "favorecido": {
+          "title": "Favorecido",
+          "type": "string"
+        },
+        "valor_empenhado": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Valor Empenhado"
+        },
+        "ano": {
+          "title": "Ano",
+          "type": "integer"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_Decimal_"
+        }
+      },
+      "required": [
+        "parlamentar_pid",
+        "favorecido",
+        "valor_empenhado",
+        "ano",
+        "fonte"
+      ],
+      "title": "Emenda",
+      "type": "object"
+    },
+    "Filiacao": {
+      "additionalProperties": false,
+      "properties": {
+        "pid": {
+          "title": "Pid",
+          "type": "string"
+        },
+        "partido_sigla": {
+          "title": "Partido Sigla",
+          "type": "string"
+        },
+        "inicio": {
+          "format": "date",
+          "title": "Inicio",
+          "type": "string"
+        },
+        "fim": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fim"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_str_"
+        }
+      },
+      "required": [
+        "pid",
+        "partido_sigla",
+        "inicio",
+        "fonte"
+      ],
+      "title": "Filiacao",
+      "type": "object"
+    },
+    "Mandato": {
+      "additionalProperties": false,
+      "properties": {
+        "poder": {
+          "$ref": "#/$defs/Poder"
+        },
+        "cargo": {
+          "title": "Cargo",
+          "type": "string"
+        },
+        "uf": {
+          "anyOf": [
+            {
+              "maxLength": 2,
+              "minLength": 2,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uf"
+        },
+        "inicio": {
+          "format": "date",
+          "title": "Inicio",
+          "type": "string"
+        },
+        "fim": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fim"
+        },
+        "status": {
+          "$ref": "#/$defs/StatusMandato"
+        },
+        "titular_pid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Titular Pid"
+        }
+      },
+      "required": [
+        "poder",
+        "cargo",
+        "inicio",
+        "status"
+      ],
+      "title": "Mandato",
+      "type": "object"
+    },
+    "Partido": {
+      "additionalProperties": false,
+      "properties": {
+        "sigla": {
+          "maxLength": 32,
+          "minLength": 2,
+          "title": "Sigla",
+          "type": "string"
+        },
+        "nome": {
+          "title": "Nome",
+          "type": "string"
+        },
+        "numero": {
+          "anyOf": [
+            {
+              "maximum": 99,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Numero"
+        },
+        "federacao": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Federacao"
+        },
+        "historico_nomes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Historico Nomes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sigla",
+        "nome"
+      ],
+      "title": "Partido",
+      "type": "object"
+    },
+    "PesquisaEleitoral": {
+      "additionalProperties": false,
+      "properties": {
+        "registro_tse": {
+          "title": "Registro Tse",
+          "type": "string"
+        },
+        "instituto": {
+          "title": "Instituto",
+          "type": "string"
+        },
+        "cargo": {
+          "title": "Cargo",
+          "type": "string"
+        },
+        "data_divulgacao": {
+          "format": "date",
+          "title": "Data Divulgacao",
+          "type": "string"
+        },
+        "margem_erro_pp": {
+          "exclusiveMinimum": 0,
+          "title": "Margem Erro Pp",
+          "type": "number"
+        },
+        "confianca_pct": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Confianca Pct",
+          "type": "number"
+        },
+        "percentual_candidato": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Percentual Candidato",
+          "type": "number"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_str_"
+        }
+      },
+      "required": [
+        "registro_tse",
+        "instituto",
+        "cargo",
+        "data_divulgacao",
+        "margem_erro_pp",
+        "confianca_pct",
+        "percentual_candidato",
+        "fonte"
+      ],
+      "title": "PesquisaEleitoral",
+      "type": "object"
+    },
+    "Poder": {
+      "enum": [
+        "legislativo",
+        "executivo",
+        "judiciario"
+      ],
+      "title": "Poder",
+      "type": "string"
+    },
+    "Posicionamento": {
+      "additionalProperties": false,
+      "properties": {
+        "autodeclaracao": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Proveniencia_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "alinhamento_partido_pct": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alinhamento Partido Pct"
+        },
+        "alinhamento_governo_pct": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alinhamento Governo Pct"
+        },
+        "classificacao_partido": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Proveniencia_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "metodologia_url": {
+          "default": "/metodologia#posicionamento",
+          "title": "Metodologia Url",
+          "type": "string"
+        }
+      },
+      "title": "Posicionamento",
+      "type": "object"
+    },
+    "Proposicao": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "casa": {
+          "title": "Casa",
+          "type": "string"
+        },
+        "tipo": {
+          "title": "Tipo",
+          "type": "string"
+        },
+        "numero": {
+          "title": "Numero",
+          "type": "integer"
+        },
+        "ano": {
+          "maximum": 2200,
+          "minimum": 1900,
+          "title": "Ano",
+          "type": "integer"
+        },
+        "ementa": {
+          "title": "Ementa",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "casa",
+        "tipo",
+        "numero",
+        "ano",
+        "ementa",
+        "url"
+      ],
+      "title": "Proposicao",
+      "type": "object"
+    },
+    "Proveniencia_Decimal_": {
+      "additionalProperties": false,
+      "properties": {
+        "valor": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Valor"
+        },
+        "fonte_id": {
+          "minLength": 2,
+          "title": "Fonte Id",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "coletado_em": {
+          "format": "date-time",
+          "title": "Coletado Em",
+          "type": "string"
+        },
+        "licenca": {
+          "minLength": 2,
+          "title": "Licenca",
+          "type": "string"
+        }
+      },
+      "required": [
+        "valor",
+        "fonte_id",
+        "url",
+        "coletado_em",
+        "licenca"
+      ],
+      "title": "Proveniencia[Decimal]",
+      "type": "object"
+    },
+    "Proveniencia_str_": {
+      "additionalProperties": false,
+      "properties": {
+        "valor": {
+          "title": "Valor",
+          "type": "string"
+        },
+        "fonte_id": {
+          "minLength": 2,
+          "title": "Fonte Id",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "coletado_em": {
+          "format": "date-time",
+          "title": "Coletado Em",
+          "type": "string"
+        },
+        "licenca": {
+          "minLength": 2,
+          "title": "Licenca",
+          "type": "string"
+        }
+      },
+      "required": [
+        "valor",
+        "fonte_id",
+        "url",
+        "coletado_em",
+        "licenca"
+      ],
+      "title": "Proveniencia[str]",
+      "type": "object"
+    },
+    "SancaoEmpresa": {
+      "additionalProperties": false,
+      "properties": {
+        "cnpj": {
+          "title": "Cnpj",
+          "type": "string"
+        },
+        "razao_social": {
+          "title": "Razao Social",
+          "type": "string"
+        },
+        "cadastro": {
+          "title": "Cadastro",
+          "type": "string"
+        },
+        "motivo": {
+          "title": "Motivo",
+          "type": "string"
+        },
+        "data_inicio": {
+          "format": "date",
+          "title": "Data Inicio",
+          "type": "string"
+        },
+        "data_fim": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data Fim"
+        },
+        "fonte": {
+          "$ref": "#/$defs/Proveniencia_str_"
+        }
+      },
+      "required": [
+        "cnpj",
+        "razao_social",
+        "cadastro",
+        "motivo",
+        "data_inicio",
+        "fonte"
+      ],
+      "title": "SancaoEmpresa",
+      "type": "object"
+    },
+    "StatusMandato": {
+      "enum": [
+        "ativo",
+        "eleito_aguardando_posse",
+        "licenciado",
+        "suplente_em_exercicio",
+        "encerrado"
+      ],
+      "title": "StatusMandato",
+      "type": "string"
+    },
+    "VotoNominal": {
+      "additionalProperties": false,
+      "properties": {
+        "votacao_id": {
+          "title": "Votacao Id",
+          "type": "string"
+        },
+        "proposicao_label": {
+          "title": "Proposicao Label",
+          "type": "string"
+        },
+        "tema": {
+          "title": "Tema",
+          "type": "string"
+        },
+        "data": {
+          "format": "date",
+          "title": "Data",
+          "type": "string"
+        },
+        "escolha": {
+          "pattern": "^(sim|nao|abstencao|ausente|obstrucao|licenca)$",
+          "title": "Escolha",
+          "type": "string"
+        },
+        "orientacao_partido": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientacao Partido"
+        },
+        "orientacao_governo": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientacao Governo"
+        },
+        "resultado": {
+          "title": "Resultado",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "votacao_id",
+        "proposicao_label",
+        "tema",
+        "data",
+        "escolha",
+        "resultado",
+        "url"
+      ],
+      "title": "VotoNominal",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "pid": {
+      "pattern": "^pid_[a-z0-9-]+$",
+      "title": "Pid",
+      "type": "string"
+    },
+    "nome": {
+      "title": "Nome",
+      "type": "string"
+    },
+    "nome_publico": {
+      "title": "Nome Publico",
+      "type": "string"
+    },
+    "slug": {
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)+$",
+      "title": "Slug",
+      "type": "string"
+    },
+    "mandatos": {
+      "items": {
+        "$ref": "#/$defs/Mandato"
+      },
+      "minItems": 1,
+      "title": "Mandatos",
+      "type": "array"
+    },
+    "partido": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Partido"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "apelidos": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Apelidos",
+      "type": "array"
+    },
+    "fontes": {
+      "items": {
+        "$ref": "#/$defs/Proveniencia_str_"
+      },
+      "minItems": 1,
+      "title": "Fontes",
+      "type": "array"
+    },
+    "biografia": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Proveniencia_str_"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "resumo_numeros": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Proveniencia_str_"
+      },
+      "title": "Resumo Numeros",
+      "type": "object"
+    },
+    "filiacoes": {
+      "items": {
+        "$ref": "#/$defs/Filiacao"
+      },
+      "title": "Filiacoes",
+      "type": "array"
+    },
+    "proposicoes": {
+      "items": {
+        "$ref": "#/$defs/Proposicao"
+      },
+      "title": "Proposicoes",
+      "type": "array"
+    },
+    "votos_recentes": {
+      "items": {
+        "$ref": "#/$defs/VotoNominal"
+      },
+      "title": "Votos Recentes",
+      "type": "array"
+    },
+    "despesas": {
+      "items": {
+        "$ref": "#/$defs/Despesa"
+      },
+      "title": "Despesas",
+      "type": "array"
+    },
+    "emendas": {
+      "items": {
+        "$ref": "#/$defs/Emenda"
+      },
+      "title": "Emendas",
+      "type": "array"
+    },
+    "doacoes": {
+      "items": {
+        "$ref": "#/$defs/Doacao"
+      },
+      "title": "Doacoes",
+      "type": "array"
+    },
+    "bens": {
+      "items": {
+        "$ref": "#/$defs/Bem"
+      },
+      "title": "Bens",
+      "type": "array"
+    },
+    "sancoes_empresas": {
+      "items": {
+        "$ref": "#/$defs/SancaoEmpresa"
+      },
+      "title": "Sancoes Empresas",
+      "type": "array"
+    },
+    "posicionamento": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Posicionamento"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "plano_governo": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Proveniencia_str_"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "pesquisas": {
+      "items": {
+        "$ref": "#/$defs/PesquisaEleitoral"
+      },
+      "title": "Pesquisas",
+      "type": "array"
+    },
+    "noticias_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Noticias Ids",
+      "type": "array"
+    },
+    "atribuicoes": {
+      "items": {
+        "$ref": "#/$defs/Atribuicao"
+      },
+      "title": "Atribuicoes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "pid",
+    "nome",
+    "nome_publico",
+    "slug",
+    "mandatos",
+    "fontes"
+  ],
+  "title": "Pessoa",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

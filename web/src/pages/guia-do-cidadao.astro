@@ -1,0 +1,152 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { canaisCidadao } from "../data/educacao";
+
+const categorias = ["Todas", "Propor leis", "Reclamar e pedir dados", "Fiscalizar e denunciar", "Acompanhar direto"] as const;
+---
+<Layout
+  title="Guia do Cidadão · Praça"
+  description="Passo a passo oficial e gratuito para propor leis no e-Cidadania, pedir dados via LAI no Fala.BR, acionar ouvidorias e fiscalizar o dinheiro público."
+>
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Cidadania ativa · ferramentas oficiais</span>
+      <h1>Guia do Cidadão: como agir, participar e cobrar</h1>
+      <p class="lede">
+        Cidadania não começa nem termina no dia da eleição. Aqui estão os canais públicos oficiais para propor leis, pedir informações com prazo obrigatório, registrar denúncias e acompanhar decisões direto da fonte.
+      </p>
+    </header>
+
+    <section class="section" aria-labelledby="roteiro-title">
+      <div class="section-heading">
+        <h2 id="roteiro-title">Qual caminho escolher para cada necessidade?</h2>
+        <a href="/aprender#quem-faz-o-que">Checar esfera responsável →</a>
+      </div>
+      <div class="three-col">
+        <article class="card" data-poder="legislativo">
+          <span class="eyebrow">Legislar e opinar</span>
+          <h3>Sugerir ou votar em projetos</h3>
+          <p class="muted">Use o <strong>e-Cidadania</strong> do Senado (Ideia Legislativa) e as <strong>Enquetes da Câmara</strong> nas páginas oficiais dos projetos.</p>
+        </article>
+        <article class="card" data-poder="executivo">
+          <span class="eyebrow">Serviços e documentos</span>
+          <h3>Cobrar serviço ou pedir dados (LAI)</h3>
+          <p class="muted">Use as <strong>Ouvidorias municipais/estaduais</strong> (ex.: 1746, 156, 162) para problemas locais e o <strong>Fala.BR</strong> para órgãos federais e pedidos LAI.</p>
+        </article>
+        <article class="card" data-poder="judiciario">
+          <span class="eyebrow">Controle e justiça</span>
+          <h3>Denunciar irregularidades</h3>
+          <p class="muted">Com documentos ou fotos em mãos, recorra ao <strong>Ministério Público (MPF/MPE)</strong>, aos <strong>Tribunais de Contas (TCU/TCE)</strong> ou à <strong>Ação Popular</strong>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="canais-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Diretório prático</span>
+          <h2 id="canais-title">Canais oficiais passo a passo</h2>
+        </div>
+        <span class="muted mono" data-canais-count aria-live="polite">{canaisCidadao.length} ferramentas</span>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-pills" role="group" aria-label="Filtrar canais por objetivo">
+          {categorias.map((categoria, index) => (
+            <button
+              class="pill-button"
+              type="button"
+              data-canal-filter={categoria}
+              aria-pressed={index === 0 ? "true" : "false"}
+            >
+              {categoria}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="two-col" data-canais-grid>
+        {canaisCidadao.map((canal) => (
+          <article class="card" data-canal data-categoria={canal.categoria}>
+            <div class="profile-meta">
+              <span class="tag">{canal.categoria}</span>
+              <span class="eyebrow">{canal.orgao}</span>
+            </div>
+            <h3>{canal.titulo}</h3>
+            <p>{canal.paraQueServe}</p>
+            <p><strong>Como usar na prática:</strong></p>
+            <ol class="bullet-list">
+              {canal.passoAPasso.map((passo) => <li>{passo}</li>)}
+            </ol>
+            <p class="muted"><strong>Regra / prazo:</strong> {canal.prazoOuRegra}</p>
+            <div class="card-actions">
+              <a class="button secondary small" href={canal.url} target="_blank" rel="noreferrer">
+                {canal.rotuloLink} ↗
+              </a>
+            </div>
+            <div class="source">
+              <span>FONTE · {canal.fonte.orgao}</span>
+              <span>{canal.fonte.coletado_em}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cobrar-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Efetividade na cobrança</span>
+          <h2 id="cobrar-title">Como cobrar parlamentares antes de uma votação</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <article class="callout" data-poder="legislativo">
+          <h3>4 passos objetivos para ser levado a sério pelo gabinete</h3>
+          <ol class="bullet-list">
+            <li><strong>Cite o número exato do projeto</strong> (ex.: PL ou PEC) e o ponto específico do texto — mensagens genéricas viram resposta automática.</li>
+            <li><strong>Identifique quem é o relator atual</strong> na comissão onde o texto está parado; é ele quem escreve o parecer votado.</li>
+            <li><strong>Use os canais institucionais oficiais</strong> (e-mail de gabinete <code>dep.nome@camara.leg.br</code> / <code>sen.nome@senado.leg.br</code> e telefone oficial) informando sua cidade e estado.</li>
+            <li><strong>Registre também na enquete oficial</strong> e acompanhe depois o voto nominal registrado no painel para conferir coerência entre discurso e voto.</li>
+          </ol>
+        </article>
+        <article class="callout">
+          <h3>Saia da bolha dos algoritmos: dieta de fontes primárias</h3>
+          <ul class="bullet-list">
+            <li>Cortes curtos em redes sociais costumam omitir emendas, votações anteriores ou o texto real aprovado em comissão.</li>
+            <li>Compare sempre qualquer postagem com o <strong>placar nominal oficial</strong>, a transmissão da <strong>TV Câmara / TV Senado / TV Justiça</strong> e os <strong>Diários Oficiais</strong>.</li>
+            <li>Na dúvida jurídica sobre notícias policiais ou processos, consulte o significado exato de cada etapa no nosso <a href="/glossario#inquerito-arquivado">Glossário de Status Judicial</a>.</li>
+          </ul>
+          <div class="card-actions">
+            <a class="button secondary small" href="/glossario">Abrir Glossário A–Z</a>
+            <a class="button secondary small" href="/pessoas">Ver perfis na Praça</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const canalButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-canal-filter]")];
+  const canalCards = [...document.querySelectorAll<HTMLElement>("[data-canais-grid] [data-canal]")];
+  const canalCount = document.querySelector<HTMLElement>("[data-canais-count]");
+
+  for (const btn of canalButtons) {
+    btn.addEventListener("click", () => {
+      const selected = btn.dataset.canalFilter ?? "Todas";
+      for (const item of canalButtons) {
+        item.setAttribute("aria-pressed", String(item === btn));
+      }
+      let visible = 0;
+      for (const card of canalCards) {
+        const show = selected === "Todas" || card.dataset.categoria === selected;
+        card.hidden = !show;
+        if (show) visible += 1;
+      }
+      if (canalCount) {
+        canalCount.textContent = `${visible} ${visible === 1 ? "ferramenta" : "ferramentas"}`;
+      }
+    });
+  }
+</script>

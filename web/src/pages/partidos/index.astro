@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { pessoas } from "../../data/pessoas";
+
+const grupos = new Map<string, { sigla: string; nome: string; federacao: string | null; count: number }>();
+for (const p of pessoas) {
+  if (!p.partido) continue;
+  const cur = grupos.get(p.partido.sigla);
+  if (cur) cur.count += 1;
+  else grupos.set(p.partido.sigla, { sigla: p.partido.sigla, nome: p.partido.nome, federacao: p.partido.federacao, count: 1 });
+}
+const lista = [...grupos.values()].sort((a, b) => a.sigla.localeCompare(b.sigla, "pt-BR"));
+---
+<Layout title="Partidos · Praça" description="Partidos e federações representados nos perfis desta edição.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Agregador partidário</span>
+      <h1>Partidos</h1>
+      <p class="lede">Selecione uma sigla para visualizar os representantes filiados nesta edição do Praça.</p>
+    </header>
+    <div class="cards">
+      {lista.map((partido) => (
+        <a class="card" data-poder="legislativo" href={`/partidos/${partido.sigla}`}>
+          <span class="eyebrow">{partido.federacao ?? "Sem federação informada"}</span>
+          <h2>{partido.sigla}</h2>
+          <p class="muted">{partido.nome}</p>
+          <span class="mono">{partido.count} perfil(is)</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

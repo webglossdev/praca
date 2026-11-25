@@ -1,0 +1,64 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PersonCard from "../../components/PersonCard.astro";
+import SourceRule from "../../components/SourceRule.astro";
+import { pessoas } from "../../data/pessoas";
+import { noticias } from "../../data/portal";
+
+export function getStaticPaths() {
+  return noticias.map((noticia) => ({ params: { id: noticia.id }, props: { noticia } }));
+}
+
+const { noticia } = Astro.props;
+const textoIntegralLiberado =
+  noticia.tipo_fonte === "oficial" &&
+  Boolean(noticia.licenca_texto_integral) &&
+  noticia.corpo_integral.length > 0;
+const pessoasLigadas = pessoas.filter((p) => noticia.pessoa_pids.includes(p.pid));
+---
+<Layout title={`${noticia.titulo} · Notícias · Praça`} description={noticia.trecho}>
+  <article class="wrap page" data-poder={noticia.poder ?? undefined}>
+    <header class="page-header">
+      <a href="/noticias">← Todas as notícias</a>
+      <span class="eyebrow">{noticia.tipo_fonte === "oficial" ? "Agência oficial" : "Imprensa · só trecho"} · {noticia.veiculo}</span>
+      <h1>{noticia.titulo}</h1>
+      <p class="lede">{noticia.trecho}</p>
+      <SourceRule
+        fonte={noticia.veiculo}
+        coletadoEm={noticia.publicado_em}
+        url={noticia.url}
+        licenca={noticia.licenca_texto_integral ?? "Direitos reservados ao veículo original"}
+      />
+    </header>
+
+    {textoIntegralLiberado ? (
+      <section class="step-card" aria-label="Texto oficial integral">
+        <span class="eyebrow">Reprodução integral autorizada ({noticia.licenca_texto_integral})</span>
+        {noticia.corpo_integral.map((paragrafo) => <p>{paragrafo}</p>)}
+        <div class="card-actions">
+          <a class="button secondary small" href={noticia.url} rel="noopener noreferrer" target="_blank">Ler na fonte oficial ↗</a>
+        </div>
+      </section>
+    ) : (
+      <section class="callout" aria-label="Direitos autorais e link original">
+        <strong>Texto completo disponível apenas no veículo original</strong>
+        <p class="muted">Por respeito aos direitos autorais de terceiros e às regras editoriais do Praça, exibimos somente título, veículo, data, trecho curto (até 500 caracteres) e o link canônico da publicação original.</p>
+        <div class="card-actions">
+          <a class="button" href={noticia.url} rel="noopener noreferrer" target="_blank">Ler matéria completa em {noticia.veiculo} ↗</a>
+        </div>
+      </section>
+    )}
+
+    {pessoasLigadas.length > 0 && (
+      <section class="section">
+        <div class="section-heading">
+          <h2>Perfis vinculados</h2>
+          <span class="muted mono">confiança ≥ 0,95</span>
+        </div>
+        <div class="people-grid">
+          {pessoasLigadas.map((pessoa) => <PersonCard pessoa={pessoa} />)}
+        </div>
+      </section>
+    )}
+  </article>
+</Layout>

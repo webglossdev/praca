@@ -1,0 +1,113 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SourceRule from "../../components/SourceRule.astro";
+import { noticias } from "../../data/portal";
+---
+<Layout title="Notícias · Praça" description="Cobertura oficial de agências públicas e referências da imprensa com trecho curto e link canônico.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Cobertura e fontes públicas</span>
+      <h1>Notícias</h1>
+      <p class="lede">Matérias de agências públicas sob licença aberta exibem texto integral com atribuição; veículos de imprensa exibem apenas título, veículo, data, trecho curto e link original.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <div class="filter-pills" role="group" aria-label="Filtrar por tipo de fonte">
+          <button class="pill-button" type="button" data-tipo-filter="" aria-pressed="true">Todas</button>
+          <button class="pill-button" type="button" data-tipo-filter="oficial" aria-pressed="false">Agências oficiais</button>
+          <button class="pill-button" type="button" data-tipo-filter="imprensa" aria-pressed="false">Imprensa (só trecho)</button>
+        </div>
+        <select class="filter-select" data-poder-select aria-label="Filtrar por Poder">
+          <option value="">Todos os Poderes</option>
+          <option value="legislativo">Legislativo</option>
+          <option value="executivo">Executivo</option>
+          <option value="judiciario">Judiciário</option>
+        </select>
+      </div>
+      <form class="search-form" action="/noticias" method="get" role="search" data-news-form>
+        <label class="sr-only" for="q">Buscar notícias</label>
+        <input id="q" name="q" type="search" autocomplete="off" placeholder="Filtrar título, tema ou veículo…" />
+        <button class="button" type="submit">Filtrar</button>
+      </form>
+    </div>
+
+    <p class="muted" style="margin-block: var(--s-4)" data-news-count aria-live="polite">{noticias.length} notícia(s).</p>
+    <div class="step-list" data-news-list>
+      {noticias.map((item) => (
+        <article
+          class="card"
+          data-poder={item.poder ?? ""}
+          data-tipo={item.tipo_fonte}
+          data-search={`${item.titulo} ${item.veiculo} ${item.tema ?? ""} ${item.trecho}`.toLocaleLowerCase("pt-BR")}
+        >
+          <span class="eyebrow">{item.tipo_fonte === "oficial" ? "Agência oficial · licença aberta" : "Imprensa · só trecho e link"} · {item.veiculo}</span>
+          <h2><a href={`/noticias/${item.id}`}>{item.titulo}</a></h2>
+          <p class="muted">{item.trecho}</p>
+          <SourceRule fonte={item.veiculo} coletadoEm={item.publicado_em} url={item.url} licenca={item.licenca_texto_integral ?? "link externo"} />
+        </article>
+      ))}
+    </div>
+    <p class="card" hidden data-news-empty>Nenhuma notícia encontrada para este filtro.</p>
+  </div>
+</Layout>
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-tipo-filter]")];
+  const select = document.querySelector<HTMLSelectElement>("[data-poder-select]");
+  const input = document.querySelector<HTMLInputElement>("#q");
+  const form = document.querySelector<HTMLFormElement>("[data-news-form]");
+  const items = [...document.querySelectorAll<HTMLElement>("[data-news-list] > article")];
+  const empty = document.querySelector<HTMLElement>("[data-news-empty]");
+  const count = document.querySelector<HTMLElement>("[data-news-count]");
+  let activeTipo = "";
+
+  const filtrar = () => {
+    const poder = select?.value ?? "";
+    const q = (input?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    let visiveis = 0;
+    for (const el of items) {
+      const ok =
+        (!activeTipo || el.dataset.tipo === activeTipo) &&
+        (!poder || el.dataset.poder === poder) &&
+        (!q || (el.dataset.search ?? "").includes(q));
+      el.hidden = !ok;
+      if (ok) visiveis += 1;
+    }
+    if (empty) empty.hidden = visiveis > 0;
+    if (count) count.textContent = `${visiveis} notícia${visiveis === 1 ? "" : "s"} encontrada${visiveis === 1 ? "" : "s"}.`;
+
+    const next = new URLSearchParams();
+    if (activeTipo) next.set("tipo", activeTipo);
+    if (poder) next.set("poder", poder);
+    if (q) next.set("q", input?.value.trim() ?? "");
+    const qs = next.toString();
+    window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  activeTipo = params.get("tipo") ?? "";
+  if (input && params.has("q")) input.value = params.get("q") ?? "";
+  if (select && params.has("poder")) select.value = params.get("poder") ?? "";
+  for (const b of buttons) b.setAttribute("aria-pressed", String((b.dataset.tipoFilter ?? "") === activeTipo));
+  filtrar();
+
+  window.addEventListener("popstate", () => {
+    const current = new URLSearchParams(window.location.search);
+    activeTipo = current.get("tipo") ?? "";
+    if (input) input.value = current.get("q") ?? "";
+    if (select) select.value = current.get("poder") ?? "";
+    for (const b of buttons) b.setAttribute("aria-pressed", String((b.dataset.tipoFilter ?? "") === activeTipo));
+    filtrar();
+  });
+
+  for (const b of buttons) {
+    b.addEventListener("click", () => {
+      activeTipo = b.dataset.tipoFilter ?? "";
+      for (const btn of buttons) btn.setAttribute("aria-pressed", String(btn === b));
+      filtrar();
+    });
+  }
+  select?.addEventListener("change", filtrar);
+  input?.addEventListener("input", filtrar);
+  form?.addEventListener("submit", (e) => { e.preventDefault(); filtrar(); });
+</script>

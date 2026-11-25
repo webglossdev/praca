@@ -1,0 +1,165 @@
+---
+import "../styles/global.css";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/instrument-sans";
+import "@fontsource-variable/jetbrains-mono";
+import { aoVivo } from "../data/portal";
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = "Praça · observatório e educação política",
+  description = "Plataforma aberta sobre política e governo brasileiro: perfis públicos com fontes oficiais, votações, notícias, explicadores do Estado e Guia do Cidadão.",
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+
+const proxEvento = aoVivo.eventos[0];
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F5F1E8" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(currentPath.replace(/^\//, ""), Astro.site ?? Astro.url).toString()} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og.svg" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("praca-theme");
+      if (savedTheme === "light" || savedTheme === "dark") document.documentElement.dataset.theme = savedTheme;
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo principal</a>
+    <div class="tripartite" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="live-strip">
+      <div class="wrap">
+        <span>
+          <span class:list={["live-dot", { "live-dot-inactive": !aoVivo.emSessao }]} aria-hidden="true"></span>
+          {aoVivo.emSessao ? "Sessão ao vivo em andamento" : `Agenda pública: ${proxEvento?.orgao ?? "Três Poderes"}`}
+        </span>
+        <a href="/ao-vivo">
+          {aoVivo.emSessao ? "Acompanhar agora →" : "Ver agenda e streams →"}
+        </a>
+      </div>
+    </div>
+    <header class="site-header">
+      <div class="wrap header-bar">
+        <a class="logo" href="/" aria-label="Praça, início">praça<span>.</span></a>
+        <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="navegacao-principal">Menu</button>
+        <nav class="site-nav" id="navegacao-principal" aria-label="Navegação principal">
+          <ul>
+            <li><a href="/pessoas" aria-current={currentPath.startsWith("/pessoas") ? "page" : undefined}>Pessoas</a></li>
+            <li><a href="/noticias" aria-current={currentPath.startsWith("/noticias") ? "page" : undefined}>Notícias</a></li>
+            <li><a href="/ao-vivo" aria-current={currentPath.startsWith("/ao-vivo") ? "page" : undefined}>Ao vivo</a></li>
+            <li><a href="/aprender" aria-current={currentPath.startsWith("/aprender") ? "page" : undefined}>Como funciona</a></li>
+            <li><a href="/guia-do-cidadao" aria-current={currentPath.startsWith("/guia-do-cidadao") ? "page" : undefined}>Guia do cidadão</a></li>
+            <li><a href="/glossario" aria-current={currentPath.startsWith("/glossario") ? "page" : undefined}>Glossário</a></li>
+            <li><a href="/busca" aria-current={currentPath.startsWith("/busca") ? "page" : undefined}>Busca</a></li>
+            <li><a href="/metodologia" aria-current={currentPath.startsWith("/metodologia") ? "page" : undefined}>Metodologia</a></li>
+          </ul>
+        </nav>
+        <button class="theme-button" type="button" data-theme-toggle aria-label="Alternar tema">☾ tema</button>
+      </div>
+    </header>
+    <main id="conteudo-principal" data-pagefind-body><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <span>Praça · dados públicos e educação cívica citáveis</span>
+        <span>AGPL-3.0 · zero cookies e rastreadores</span>
+        <div class="footer-links">
+          <a href="/partidos">Partidos</a>
+          <a href="/estados">Estados</a>
+          <a href="/comparar">Comparar</a>
+          <a href="/fontes">Fontes</a>
+          <a href="/dados">Dados</a>
+          <a href="/status">Status</a>
+          <a href="/corrigir">Corrigir dado</a>
+          <a href="/sobre">Sobre</a>
+          <a href="/privacidade">Privacidade</a>
+          <a href="/termos">Termos</a>
+        </div>
+      </div>
+    </footer>
+    <script is:inline>
+      const projectBase = "/praca";
+      for (const element of document.querySelectorAll("a[href^='/'], form[action^='/']")) {
+        if (element instanceof HTMLAnchorElement) {
+          const href = element.getAttribute("href") || "";
+          if (href !== "/" && !href.startsWith(`${projectBase}/`) && !href.startsWith("//")) {
+            element.setAttribute("href", `${projectBase}${href}`);
+          } else if (href === "/") {
+            element.setAttribute("href", `${projectBase}/`);
+          }
+        }
+        if (element instanceof HTMLFormElement) {
+          const action = element.getAttribute("action") || "";
+          if (!action.startsWith(`${projectBase}/`) && !action.startsWith("//")) {
+            element.setAttribute("action", `${projectBase}${action}`);
+          }
+        }
+      }
+
+      const navToggle = document.querySelector("[data-nav-toggle]");
+      const nav = document.querySelector("#navegacao-principal");
+      navToggle?.addEventListener("click", () => {
+        const opened = navToggle.getAttribute("aria-expanded") !== "true";
+        navToggle.setAttribute("aria-expanded", String(opened));
+        nav?.classList.toggle("nav-open", opened);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (navToggle?.getAttribute("aria-expanded") !== "true") return;
+        navToggle.setAttribute("aria-expanded", "false");
+        nav?.classList.remove("nav-open");
+        navToggle.focus();
+      });
+
+      const themeButton = document.querySelector("[data-theme-toggle]");
+      const getEffectiveTheme = () => {
+        const current = document.documentElement.dataset.theme;
+        if (current === "dark" || current === "light") return current;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      };
+      const syncThemeLabel = () => {
+        if (!themeButton) return;
+        const dark = getEffectiveTheme() === "dark";
+        themeButton.textContent = dark ? "☀ tema" : "☾ tema";
+        themeButton.setAttribute("aria-pressed", String(dark));
+      };
+      syncThemeLabel();
+      themeButton?.addEventListener("click", () => {
+        const nextTheme = getEffectiveTheme() === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = nextTheme;
+        localStorage.setItem("praca-theme", nextTheme);
+        syncThemeLabel();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+        const tag = (document.activeElement?.tagName || "").toLowerCase();
+        if (tag === "input" || tag === "textarea" || tag === "select") return;
+        const campo = document.querySelector("#q");
+        if (campo instanceof HTMLInputElement) {
+          event.preventDefault();
+          campo.focus();
+          campo.select();
+        } else {
+          event.preventDefault();
+          window.location.href = "/busca";
+        }
+      });
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "Praça", url: Astro.site ?? Astro.url.origin })} />
+  </body>
+</html>

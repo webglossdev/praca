@@ -1,0 +1,90 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { correcoes } from "../data/portal";
+---
+<Layout title="Solicitar correção e registro público · Praça" description="Canal público para reportar erro factual com fonte verificável e consultar correções aplicadas.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Direito de correção e auditoria</span>
+      <h1>Corrigir um dado</h1>
+      <p class="lede">Encontrou desatualização ou erro factual? Toda alteração exige ligação verificável para o portal oficial ou documento primário e fica registrada no histórico abaixo.</p>
+    </header>
+
+    <section class="sim-box" style="margin-bottom: var(--s-7);">
+      <h2>Preparar pedido de correção (GitHub Issue pública)</h2>
+      <p class="muted">Nenhum dado deste formulário é enviado para servidores ocultos. Ao enviar, abrimos uma prévia formatada para revisão transparente ou colagem em nosso template de correção.</p>
+      <p class="callout"><strong>Não envie CPF, endereço, dados médicos, senha ou documento pessoal.</strong> O prazo público recomendado é confirmação em até 1 hora, triagem em até 2 dias úteis e resposta em até 30 dias corridos. Casos sensíveis podem ser suspensos para revisão jurídica.</p>
+      <div class="sim-inputs">
+        <div class="sim-field">
+          <label for="cor-pagina">Página ou perfil</label>
+          <input id="cor-pagina" name="pagina" type="text" autocomplete="off" placeholder="/pessoas/carla-mendes-mg…" data-cor-pagina />
+        </div>
+        <div class="sim-field">
+          <label for="cor-campo">Campo incorreto</label>
+          <input id="cor-campo" name="campo" type="text" autocomplete="off" placeholder="Ex.: mandatos[0].status…" data-cor-campo />
+        </div>
+        <div class="sim-field">
+          <label for="cor-fonte">URL oficial de comprovação</label>
+          <input id="cor-fonte" name="fonte" type="url" autocomplete="url" placeholder="https://www.tse.jus.br/…" data-cor-fonte />
+        </div>
+      </div>
+      <div class="sim-field">
+        <label for="cor-desc">O que precisa ser corrigido?</label>
+        <input id="cor-desc" name="descricao" type="text" autocomplete="off" placeholder="Descreva o dado atual e o valor comprovado pela fonte oficial…" data-cor-desc />
+      </div>
+      <div class="card-actions">
+        <button class="button" type="button" data-cor-gerar>Gerar resumo auditável</button>
+      </div>
+      <pre class="callout mono" hidden data-cor-preview aria-live="polite" style="white-space: pre-wrap; margin: 0;"></pre>
+    </section>
+
+    <section class="section" aria-labelledby="reg-correcoes">
+      <div class="section-heading">
+        <h2 id="reg-correcoes">Registro público de correções aplicadas</h2>
+        <span class="muted">{correcoes.length} registro(s)</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Data</th><th>Página</th><th>Campo</th><th>Alteração</th><th>Motivo</th><th>Fonte</th></tr></thead>
+          <tbody>
+            {correcoes.map((c) => (
+              <tr>
+                <td class="mono">{c.data}</td>
+                <td><code>{c.pagina}</code></td>
+                <td><code>{c.campo}</code></td>
+                <td>{c.alteracao}</td>
+                <td class="muted">{c.motivo}</td>
+                <td><a href={c.fonte_url} rel="noopener noreferrer" target="_blank">Fonte ↗</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Layout>
+<script>
+  const paginaInput = document.querySelector<HTMLInputElement>("[data-cor-pagina]");
+  const campoInput = document.querySelector<HTMLInputElement>("[data-cor-campo]");
+  const fonteInput = document.querySelector<HTMLInputElement>("[data-cor-fonte]");
+  const descInput = document.querySelector<HTMLInputElement>("[data-cor-desc]");
+  const btn = document.querySelector<HTMLButtonElement>("[data-cor-gerar]");
+  const preview = document.querySelector<HTMLElement>("[data-cor-preview]");
+
+  const params = new URLSearchParams(window.location.search);
+  if (paginaInput && params.has("pagina")) paginaInput.value = params.get("pagina") ?? "";
+
+  btn?.addEventListener("click", () => {
+    if (!preview) return;
+    const texto = [
+      "SOLICITAÇÃO DE CORREÇÃO · PRAÇA",
+      `Página: ${paginaInput?.value || "(não informada)"}`,
+      `Campo: ${campoInput?.value || "(não informado)"}`,
+      `Fonte oficial: ${fonteInput?.value || "(não informada)"}`,
+      `Descrição: ${descInput?.value || "(não informada)"}`,
+      "Template de Issue: .github/ISSUE_TEMPLATE/correcao-dado.yml",
+    ].join("\n");
+    preview.textContent = texto;
+    preview.hidden = false;
+  });
+</script>

@@ -1,0 +1,362 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SourceRule from "../../components/SourceRule.astro";
+import { formatBrl, initials, pessoas } from "../../data/pessoas";
+import { noticias, SECOES_SENSIVEIS_ATIVAS } from "../../data/portal";
+import { guiaPorPoder } from "../../data/educacao";
+
+export function getStaticPaths() {
+  return pessoas.map((pessoa) => ({ params: { slug: pessoa.slug }, props: { pessoa } }));
+}
+
+const { pessoa } = Astro.props;
+const mandato = pessoa.mandatos[0];
+const guia = mandato ? guiaPorPoder[mandato.poder] : undefined;
+const resumoItems = Object.entries(pessoa.resumo_numeros ?? {});
+const votos = pessoa.votos_recentes ?? [];
+const proposicoes = pessoa.proposicoes ?? [];
+const despesas = pessoa.despesas ?? [];
+const emendas = pessoa.emendas ?? [];
+const doacoes = pessoa.doacoes ?? [];
+const bens = pessoa.bens ?? [];
+const sancoes = pessoa.sancoes_empresas ?? [];
+const filiacoes = pessoa.filiacoes ?? [];
+const pesquisas = pessoa.pesquisas ?? [];
+const noticiasRelacionadas = noticias.filter((n) => (pessoa.noticias_ids ?? []).includes(n.id));
+const atribuicoes = pessoa.atribuicoes ?? [];
+---
+<Layout title={`${pessoa.nome_publico} · Praça`} description={`Perfil público com proveniência oficial de ${pessoa.nome_publico}.`}>
+  <div class="wrap" data-poder={mandato?.poder}>
+    <!-- 1. Identidade & Ações -->
+    <header class="profile-header">
+      <a href="/pessoas">← Todas as pessoas</a>
+      <div class="profile-identity">
+        <div class="avatar" aria-hidden="true">{initials(pessoa.nome_publico)}</div>
+        <div>
+          <span class="eyebrow">{guia?.nome ?? mandato?.poder}</span>
+          <h1>{pessoa.nome_publico}</h1>
+          <p class="muted">{pessoa.nome !== pessoa.nome_publico ? `Nome civil: ${pessoa.nome} · ` : ""}{mandato?.cargo}{mandato?.uf ? ` · ${mandato.uf}` : ""}</p>
+        </div>
+      </div>
+      <div class="profile-meta">
+        {pessoa.partido && <a class="tag" href={`/partidos/${pessoa.partido.sigla}`}>{pessoa.partido.sigla} · {pessoa.partido.nome}</a>}
+        {mandato?.uf && <a class="tag" href={`/estados/${mandato.uf.toLowerCase()}`}>UF: {mandato.uf}</a>}
+        <span class="tag">Status: {mandato?.status.replaceAll("_", " ")}</span>
+        {pessoa.apelidos.map((apelido) => <span class="tag">“{apelido}”</span>)}
+      </div>
+      {mandato?.status === "eleito_aguardando_posse" && (
+        <div class="callout">
+          <strong>Mandato diplomado — aguardando posse</strong>
+          <p class="muted">Este perfil foi diplomado nas eleições mais recentes e inicia o exercício oficial em {mandato.inicio}. Ainda não há votações nominais ou gastos de mandato ativo nesta legislatura.</p>
+        </div>
+      )}
+      <div class="card-actions">
+        <button class="button secondary small" type="button" data-share aria-live="polite">Compartilhar perfil</button>
+        <a class="button secondary small" href={`/comparar?pids=${pessoa.pid}`}>Comparar com outro perfil</a>
+        <a class="button secondary small" href={`/corrigir?pagina=${encodeURIComponent('/pessoas/' + pessoa.slug)}`}>Corrigir dado</a>
+      </div>
+      <nav class="toc-bar" aria-label="Seções do perfil">
+        <a class="pill-button" href="#resumo">Resumo</a>
+        <a class="pill-button" href="#atuacao">Atuação e votos</a>
+        <a class="pill-button" href="#dinheiro">Dinheiro público e bens</a>
+        <a class="pill-button" href="#posicionamento">Posicionamento</a>
+        <a class="pill-button" href="#carreira">Mandatos e filiações</a>
+        <a class="pill-button" href="#imprensa">Notícias</a>
+        <a class="pill-button" href="#processos">Seção jurídica</a>
+        <a class="pill-button" href="#fontes-perfil">Fontes brutas</a>
+      </nav>
+    </header>
+
+    <!-- 2. Resumo & Biografia + Contexto do Poder -->
+    <section class="section detail-grid" id="resumo" aria-labelledby="resumo-title">
+      <div style="display: grid; gap: var(--s-4); align-content: start;">
+        <h2 id="resumo-title">Resumo objetivo</h2>
+        <p class="lede">{pessoa.biografia?.valor ?? "Sem biografia oficial adicional registrada nesta edição."}</p>
+        <div class="facts">
+          {resumoItems.length > 0 ? resumoItems.map(([chave, info]) => (
+            <div class="fact">
+              <strong>{info.valor}</strong>
+              <span>{chave.replaceAll("_", " ")} · <a href={info.url} rel="noopener noreferrer" target="_blank">fonte</a></span>
+            </div>
+          )) : (
+            <>
+              <div class="fact"><strong>{pessoa.mandatos.length}</strong><span>mandato(s)</span></div>
+              <div class="fact"><strong>{pessoa.fontes.length}</strong><span>fonte(s)</span></div>
+            </>
+          )}
+        </div>
+      </div>
+      <aside aria-label="Contexto constitucional">
+        {guia && (
+          <div class="callout">
+            <span class="eyebrow">Entenda este papel · {guia.nome}</span>
+            <h3>O que cabe ao {guia.nome}?</h3>
+            <p class="muted">{guia.missaoConstitucional}</p>
+            <p class="muted"><strong>Como fiscalizar:</strong> {guia.comoFiscalizar}</p>
+            <div class="card-actions">
+              <a class="button secondary small" href={`/poderes/${guia.id}`}>Ver guia do Poder →</a>
+              <a class="button secondary small" href="/guia-do-cidadao">Como cobrar</a>
+              <a class="button secondary small" href="/glossario">Glossário</a>
+            </div>
+          </div>
+        )}
+      </aside>
+    </section>
+
+    <!-- 3. Atuação (Votações e Proposições) -->
+    <section class="section" id="atuacao" aria-labelledby="atuacao-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Atuação legislativa</span>
+          <h2 id="atuacao-title">Votações nominais e proposições</h2>
+        </div>
+        {votos.length > 0 && <a class="button secondary small" href={`/pessoas/${pessoa.slug}/votos`}>Ver todas as votações ({votos.length}) e exportar CSV →</a>}
+      </div>
+
+      {votos.length > 0 ? (
+        <div class="table-wrap" style="margin-bottom: var(--s-5);">
+          <table class="data-table">
+            <thead>
+              <tr><th>Proposição</th><th>Tema</th><th>Data</th><th>Voto</th><th>Partido / Governo</th><th>Resultado</th></tr>
+            </thead>
+            <tbody>
+              {votos.slice(0, 6).map((v) => (
+                <tr>
+                  <td><a href={`/votacoes/${v.votacao_id}`}><strong>{v.proposicao_label}</strong></a></td>
+                  <td>{v.tema}</td>
+                  <td class="mono">{v.data}</td>
+                  <td><span class={`vote-pill vote-${v.escolha}`}>{v.escolha}</span></td>
+                  <td class="muted">{v.orientacao_partido ?? "—"} / {v.orientacao_governo ?? "—"}</td>
+                  <td>{v.resultado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="callout muted" style="margin-bottom: var(--s-5);">Sem votações nominais em plenário associadas ao mandato atual.</p>
+      )}
+
+      {proposicoes.length > 0 && (
+        <div class="two-col">
+          {proposicoes.map((prop) => (
+            <article class="card">
+              <span class="eyebrow">{prop.casa} · {prop.tipo} {prop.numero}/{prop.ano}</span>
+              <h3><a href={prop.url} rel="noopener noreferrer" target="_blank">{prop.tipo} {prop.numero}/{prop.ano} ↗</a></h3>
+              <p class="muted">{prop.ementa}</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <!-- 4. Dinheiro público, doações, bens e sanções -->
+    <section class="section" id="dinheiro" aria-labelledby="dinheiro-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Cota, emendas, campanhas e patrimônio</span>
+          <h2 id="dinheiro-title">Dinheiro e bens declarados</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <article class="card">
+          <span class="eyebrow">Cota parlamentar / CEAPS</span>
+          <h3>Despesas ressarcidas</h3>
+          {despesas.length > 0 ? (
+            <ul class="bullet-list">
+              {despesas.map((d) => <li><strong>{d.categoria}</strong>: {formatBrl(d.valor)} ({d.competencia.slice(0, 7)})</li>)}
+            </ul>
+          ) : <p class="muted">Sem despesa parlamentar registrada para este cargo ou período.</p>}
+        </article>
+        <article class="card">
+          <span class="eyebrow">Portal da Transparência (CGU)</span>
+          <h3>Emendas empenhadas</h3>
+          {emendas.length > 0 ? (
+            <ul class="bullet-list">
+              {emendas.map((e) => <li><strong>{e.favorecido}</strong> ({e.ano}): {formatBrl(e.valor_empenhado)}</li>)}
+            </ul>
+          ) : <p class="muted">Sem emendas parlamentares atribuídas a este perfil.</p>}
+        </article>
+        <article class="card">
+          <span class="eyebrow">TSE · Prestação de contas</span>
+          <h3>Receitas e doações eleitorais</h3>
+          {doacoes.length > 0 ? (
+            <ul class="bullet-list">
+              {doacoes.map((d) => <li><strong>{d.doador}</strong> ({d.ano_eleitoral}): {formatBrl(d.valor)}</li>)}
+            </ul>
+          ) : <p class="muted">Sem registro de doação eleitoral vinculado neste corte.</p>}
+        </article>
+        <article class="card">
+          <span class="eyebrow">TSE · Bens declarados e CEIS/CNEP</span>
+          <h3>Patrimônio declarado e sanções</h3>
+          {bens.length > 0 ? (
+            <ul class="bullet-list">
+              {bens.map((b) => <li>{b.descricao} ({b.ano_eleitoral}): <strong>{formatBrl(b.valor)}</strong></li>)}
+            </ul>
+          ) : <p class="muted">Sem bens declarados publicados pelo TSE para este perfil.</p>}
+          {sancoes.length > 0 ? (
+            <p class="muted">{sancoes.length} registro(s) de sanção empresarial (CEIS/CNEP/CEPIM).</p>
+          ) : <p class="muted">Sanções CGU (CEIS/CNEP/CEPIM) em empresas ligadas ao QSA: nenhum registro.</p>}
+        </article>
+      </div>
+    </section>
+
+    <!-- 5. Posicionamento metodológico + 6. Plano de governo & Pesquisas -->
+    <section class="section two-col" id="posicionamento">
+      <article class="card">
+        <span class="eyebrow">Posicionamento transparente</span>
+        <h2>Como este perfil vota e se declara</h2>
+        {pessoa.posicionamento ? (
+          <div style="display: grid; gap: var(--s-3);">
+            {pessoa.posicionamento.autodeclaracao && (
+              <p><strong>Autodeclaração datada:</strong> {pessoa.posicionamento.autodeclaracao.valor}</p>
+            )}
+            {pessoa.posicionamento.alinhamento_partido_pct != null && (
+              <div>
+                <p class="muted">Alinhamento com a bancada ({pessoa.posicionamento.alinhamento_partido_pct}%)</p>
+                <div class="bar-track"><div class="bar-fill" style={`width: ${pessoa.posicionamento.alinhamento_partido_pct}%`}></div></div>
+              </div>
+            )}
+            {pessoa.posicionamento.alinhamento_governo_pct != null && (
+              <div>
+                <p class="muted">Coincidência com orientação de governo ({pessoa.posicionamento.alinhamento_governo_pct}%)</p>
+                <div class="bar-track"><div class="bar-fill" style={`width: ${pessoa.posicionamento.alinhamento_governo_pct}%; background: var(--exe)`}></div></div>
+              </div>
+            )}
+            {pessoa.posicionamento.classificacao_partido && (
+              <p class="muted"><strong>Nota partidária:</strong> {pessoa.posicionamento.classificacao_partido.valor}</p>
+            )}
+            <a href={pessoa.posicionamento.metodologia_url}>Entender o cálculo objetivo (sem rótulo inferido) →</a>
+          </div>
+        ) : (
+          <p class="muted">Sem dados de alinhamento ou autodeclaração aplicáveis a este cargo. Não atribuímos espectros ideológicos por inferência.</p>
+        )}
+      </article>
+
+      <article class="card">
+        <span class="eyebrow">Eleições · TSE</span>
+        <h2>Plano de governo e pesquisas</h2>
+        {pessoa.plano_governo ? (
+          <p>{pessoa.plano_governo.valor} (<a href={pessoa.plano_governo.url} rel="noopener noreferrer" target="_blank">documento TSE ↗</a>)</p>
+        ) : <p class="muted">Sem plano de governo executivo vinculado a este cargo.</p>}
+        {pesquisas.length > 0 ? (
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Registro TSE</th><th>Instituto</th><th>Data</th><th>%</th><th>Margem</th></tr></thead>
+              <tbody>
+                {pesquisas.map((q) => (
+                  <tr>
+                    <td class="mono">{q.registro_tse}</td>
+                    <td>{q.instituto}</td>
+                    <td>{q.data_divulgacao}</td>
+                    <td><strong>{q.percentual_candidato}%</strong></td>
+                    <td>±{q.margem_erro_pp} p.p.</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <p class="muted">Nenhuma pesquisa eleitoral registrada vinculada na amostra atual.</p>}
+      </article>
+    </section>
+
+    <!-- 7. Carreira & Filiações -->
+    <section class="section two-col" id="carreira">
+      <div>
+        <div class="section-heading"><h2>Mandatos registrados</h2><span class="muted">{pessoa.mandatos.length} registro(s)</span></div>
+        <div class="timeline">
+          {pessoa.mandatos.map((item) => (
+            <article>
+              <h3>{item.cargo}</h3>
+              <p class="muted">{item.uf ?? "Âmbito nacional"} · desde {item.inicio.slice(0, 10)} · {item.status.replaceAll("_", " ")}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div class="section-heading"><h2>Histórico de filiações partidárias</h2></div>
+        {filiacoes.length > 0 ? (
+          <div class="timeline">
+            {filiacoes.map((f) => (
+              <article>
+                <h3><a href={`/partidos/${f.partido_sigla}`}>{f.partido_sigla}</a></h3>
+                <p class="muted">De {f.inicio} {f.fim ? `até ${f.fim}` : "(filiação atual)"}</p>
+              </article>
+            ))}
+          </div>
+        ) : <p class="muted">Sem histórico de filiação partidária (vedado à magistratura ou não aplicável).</p>}
+      </div>
+    </section>
+
+    <!-- 8. Na imprensa & Agências -->
+    <section class="section" id="imprensa" aria-labelledby="imprensa-title">
+      <div class="section-heading">
+        <h2 id="imprensa-title">Notícias vinculadas</h2>
+        <span class="muted mono">confiança automática ≥ 0,95</span>
+      </div>
+      {noticiasRelacionadas.length > 0 ? (
+        <div class="two-col">
+          {noticiasRelacionadas.map((n) => (
+            <article class="card">
+              <span class="eyebrow">{n.tipo_fonte === "oficial" ? "Fonte oficial" : "Imprensa · só trecho"} · {n.veiculo}</span>
+              <h3><a href={`/noticias/${n.id}`}>{n.titulo}</a></h3>
+              <p class="muted">{n.trecho}</p>
+              <SourceRule fonte={n.veiculo} coletadoEm={n.publicado_em} url={n.url} />
+            </article>
+          ))}
+        </div>
+      ) : <p class="muted">Nenhuma notícia vinculada a este perfil nesta edição.</p>}
+    </section>
+
+    <!-- 9. Seção sensível em quarentena (AGENTS.md) -->
+    <section class="section" id="processos" aria-labelledby="processos-title">
+      <h2 id="processos-title" style="margin-bottom: var(--s-4);">Menções jurídicas e investigações</h2>
+      {!SECOES_SENSIVEIS_ATIVAS ? (
+        <div class="quarantine-card">
+          <strong>Seção desligada até revisão jurídica</strong>
+          <p class="muted">Em conformidade com as regras do projeto e revisão jurídica pendente, menções de imprensa a investigações ou processos não são exibidas publicamente nesta fase ({atribuicoes.length} item(ns) retido(s) internamente em quarentena).</p>
+        </div>
+      ) : (
+        <p class="muted">{atribuicoes.length} registro(s) atribuído(s).</p>
+      )}
+    </section>
+
+    <!-- 10. Fontes brutas -->
+    <section class="section" id="fontes-perfil" aria-labelledby="fontes-perfil-title">
+      <div class="section-heading">
+        <h2 id="fontes-perfil-title">Fontes primárias do perfil</h2>
+        <a href="/downloads/pessoas.json">Baixar JSON completo ↗</a>
+      </div>
+      <div class="step-list">
+        {pessoa.fontes.map((f) => (
+          <div class="card">
+            <strong>{f.valor} ({f.fonte_id})</strong>
+            <SourceRule fonte={f.fonte_id} coletadoEm={f.coletado_em} url={f.url} licenca={f.licenca} />
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+<script>
+  const share = document.querySelector<HTMLButtonElement>("[data-share]");
+  share?.addEventListener("click", async () => {
+    const data = { title: document.title, text: "Perfil público na Praça", url: window.location.href };
+    try {
+      if (navigator.share) {
+        await navigator.share(data);
+        share.textContent = "Perfil compartilhado";
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        share.textContent = "Link copiado";
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        share.textContent = "Compartilhamento cancelado";
+      } else {
+        share.textContent = "Não foi possível compartilhar";
+      }
+    }
+  });
+</script>
+<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@type": "Person", name: pessoa.nome_publico, url: Astro.url.toString() })} />

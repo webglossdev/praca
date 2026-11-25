@@ -1,0 +1,26 @@
+name: Fonte oficial indisponível ou alterada
+description: Relatar erro recorrente de coleta, circuito aberto ou mudança de schema em API pública
+title: "[fonte-quebrada] "
+labels: ["bug:fonte-quebrada", "pipeline"]
+body:
+  - type: input
+    id: fonte_id
+    attributes:
+      label: ID da fonte (fontes.yml)
+      placeholder: Ex.: camara, senado, tse, cgu-transparencia
+    validations:
+      required: true
+  - type: input
+    id: endpoint
+    attributes:
+      label: Endpoint ou arquivo afetado
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: erro
+    attributes:
+      label: Payload ou erro observado
+      render: text
+    validations:
+      required: true

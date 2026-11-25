@@ -1,0 +1,154 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PersonCard from "../components/PersonCard.astro";
+import PracaSvg from "../components/PracaSvg.astro";
+import SourceRule from "../components/SourceRule.astro";
+import { pessoas } from "../data/pessoas";
+import { aoVivo, fontes, noticias, votacoes } from "../data/portal";
+
+const poderes = [
+  { id: "legislativo", nome: "Legislativo", descricao: "Congresso e representantes", count: pessoas.filter((p) => p.mandatos[0]?.poder === "legislativo").length },
+  { id: "executivo", nome: "Executivo", descricao: "Governos e administração", count: pessoas.filter((p) => p.mandatos[0]?.poder === "executivo").length },
+  { id: "judiciario", nome: "Judiciário", descricao: "Cortes e justiça", count: pessoas.filter((p) => p.mandatos[0]?.poder === "judiciario").length },
+];
+---
+<Layout>
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Observatório público · edição 01</span>
+      <h1>Quem decide, como funciona e como cobrar.</h1>
+      <p class="lede">
+        Perfis políticos brasileiros com fontes oficiais somados a um guia claro de como o governo funciona no dia a dia — sem opinião partidária e com cada dado ligado à origem.
+      </p>
+      <form class="search-form" action="/busca" method="get" role="search">
+        <label class="sr-only" for="q">Buscar no Praça</label>
+        <input id="q" name="q" type="search" placeholder="Buscar pessoa, votação, notícia ou termo (atalho /)" />
+        <button class="button" type="submit">Buscar</button>
+      </form>
+      <div class="card-actions">
+        <a class="button secondary" href="/aprender">Aprender como funciona o Brasil →</a>
+        <a class="button secondary" href="/guia-do-cidadao">Abrir Guia do Cidadão</a>
+        <a class="button secondary" href="/comparar">Comparar perfis</a>
+      </div>
+    </div>
+    <div style="display: grid; gap: var(--s-4);">
+      <PracaSvg variant="hero" emSessao={aoVivo.emSessao} />
+      <aside class="hero-aside" aria-label="Estado da coleta">
+        <span class="eyebrow">Pulso da coleta</span>
+        <strong>{fontes.length} fontes no catálogo · {pessoas.length} perfis na edição</strong>
+        <p>As fontes oficiais são consultadas por ciclos e cada snapshot preserva sua data ISO 8601.</p>
+        <a href="/status">Ver saúde dos coletores e correções <span aria-hidden="true">↗</span></a>
+      </aside>
+    </div>
+  </section>
+  <div class="signal-line wrap" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <section class="wrap section" aria-labelledby="aprender-home-title">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">Educação cívica</span>
+        <h2 id="aprender-home-title">Aprenda como funciona o Brasil e como agir</h2>
+      </div>
+      <a href="/aprender">Abrir guia completo →</a>
+    </div>
+    <div class="two-col">
+      <a class="card" data-poder="executivo" href="/aprender#quem-faz-o-que">
+        <span class="eyebrow">Bússola federativa</span>
+        <h3>Quem faz o quê: Município × Estado × União</h3>
+        <p class="muted">Buraco na rua, posto de saúde, Ensino Médio ou Polícia Militar? Descubra quem executa, quem fiscaliza e quem cobrar em cada problema.</p>
+      </a>
+      <a class="card" data-poder="legislativo" href="/aprender#como-nasce-uma-lei">
+        <span class="eyebrow">Regras do jogo</span>
+        <h3>Ciclo das leis, orçamento público e eleições</h3>
+        <p class="muted">Compare PL, PLP, PEC e MP, veja por que mais de 90% do orçamento é engessado e simule o cálculo do Quociente Eleitoral.</p>
+      </a>
+      <a class="card" href="/guia-do-cidadao">
+        <span class="eyebrow">Guia do Cidadão</span>
+        <h3>Como propor leis, pedir dados (LAI) e denunciar</h3>
+        <p class="muted">Passo a passo oficial para usar o e-Cidadania, o Fala.BR, ouvidorias estaduais/municipais, MPF, TCU e Ação Popular.</p>
+      </a>
+      <a class="card" data-poder="judiciario" href="/glossario">
+        <span class="eyebrow">Glossário A–Z</span>
+        <h3>Política, orçamento e status judicial sem juridiquês</h3>
+        <p class="muted">Entenda a diferença objetiva entre inquérito arquivado, réu, liminar, 1ª/2ª instância, trânsito em julgado e prescrição.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="poderes-title">
+    <div class="section-heading">
+      <h2 id="poderes-title">Os três Poderes</h2>
+      <span class="muted mono">{pessoas.length} perfis em circulação · <a href="/estados">por UF</a> · <a href="/partidos">por partido</a></span>
+    </div>
+    <div class="cards">
+      {poderes.map((poder) => (
+        <a class="card" data-poder={poder.id} href={`/pessoas?poder=${poder.id}`}>
+          <span class="eyebrow">{poder.nome}</span>
+          <strong class="number">{poder.count}</strong>
+          <span class="muted">{poder.descricao}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="people-title">
+    <div class="section-heading">
+      <h2 id="people-title">Pessoas em destaque</h2>
+      <a href="/pessoas">Ver todas ({pessoas.length}) →</a>
+    </div>
+    <div class="people-grid">{pessoas.slice(0, 3).map((pessoa) => <PersonCard pessoa={pessoa} />)}</div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="radar-title">
+    <div class="section-heading">
+      <h2 id="radar-title">Votações e cobertura recentes</h2>
+      <a href="/noticias">Todas as notícias ({noticias.length}) →</a>
+    </div>
+    <div class="two-col">
+      <div class="step-list">
+        {votacoes.map((vot) => (
+          <a class="card" data-poder="legislativo" href={`/votacoes/${vot.id}`}>
+            <span class="eyebrow">{vot.casa} · {vot.data}</span>
+            <h3>{vot.proposicao_label ?? vot.proposicao_id}</h3>
+            <p class="muted">{vot.titulo}</p>
+            <SourceRule fonte={vot.casa ?? "Congresso"} coletadoEm={vot.data} />
+          </a>
+        ))}
+      </div>
+      <div class="step-list">
+        {noticias.slice(0, 3).map((item) => (
+          <a class="card" data-poder={item.poder ?? undefined} href={`/noticias/${item.id}`}>
+            <span class="eyebrow">{item.tipo_fonte === "oficial" ? "Agência oficial" : "Imprensa · só trecho"} · {item.veiculo}</span>
+            <h3>{item.titulo}</h3>
+            <p class="muted">{item.trecho}</p>
+            <SourceRule fonte={item.veiculo} coletadoEm={item.publicado_em} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="fontes">
+    <div class="section-heading">
+      <h2>Fontes públicas catalogadas</h2>
+      <a href="/fontes">Ver catálogo completo ({fontes.length}) →</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Fonte</th><th>Licença</th><th>Frequência</th><th>URL oficial</th></tr>
+        </thead>
+        <tbody>
+          {fontes.slice(0, 5).map((fonte) => (
+            <tr>
+              <td><strong>{fonte.nome}</strong></td>
+              <td>{fonte.licenca}</td>
+              <td>{fonte.frequencia}</td>
+              <td><a href={fonte.url} rel="noopener noreferrer" target="_blank">{fonte.url}</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Layout>

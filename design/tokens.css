@@ -1,0 +1,108 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * Tokens de design v0: direção "Tinta & Papel".
+ * Fonte única da verdade para cor, tipografia, espaço e movimento.
+ * Claro/escuro via color-scheme + light-dark() (sem duplicar regras).
+ * Forçar tema: <html data-theme="light|dark">.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ── Fontes (self-hosted em produção; ver PLANO.md §4) ───────────── */
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-ui: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* ── Papel & tinta (neutros quentes, nunca cinza puro) ───────────── */
+  --bg:            light-dark(#F5F1E8, #0D0F17);
+  --bg-raised:     light-dark(#FBF8F1, #121521);
+  --surface:       light-dark(#FFFFFF, #151927);
+  --surface-sunk:  light-dark(#ECE6D8, #0A0C13);
+  --line:          light-dark(#DDD5C3, #262B3D);
+  --line-strong:   light-dark(#BDB39B, #3A4160);
+
+  --text:          light-dark(#14161F, #ECE8DD);
+  --text-soft:     light-dark(#2E3242, #CFCBC0);
+  --text-muted:    light-dark(#5A5F70, #A3A7B5);   /* AA sobre --bg nos dois temas */
+  --text-faint:    light-dark(#8A8E9C, #6F7487);   /* só decorativo / desabilitado */
+
+  /* ── Os três Poderes: cor de identidade (não partidária!) ────────────
+     Evitamos vermelho x azul de propósito: seria leitura partidária.   */
+  --leg:           light-dark(#1F8A70, #3FBF9F);   /* Legislativo: verdigris */
+  --leg-text:      light-dark(#17705A, #3FBF9F);
+  --leg-wash:      light-dark(#DCEFE8, #12261F);
+
+  --exe:           light-dark(#C98A1B, #E8B04A);   /* Executivo: âmbar */
+  --exe-text:      light-dark(#8F5E00, #E8B04A);
+  --exe-wash:      light-dark(#F6E8C9, #2A2010);
+
+  --jud:           light-dark(#4A4FB8, #8B90F0);   /* Judiciário: índigo */
+  --jud-text:      light-dark(#3C41A8, #A5A9F5);
+  --jud-wash:      light-dark(#E1E2F5, #1A1C38);
+
+  /* ── Sinal: "ao vivo" e alertas. Único tom quente-saturado. ──────── */
+  --signal:        light-dark(#E5472B, #FF6A4D);
+  --signal-text:   light-dark(#C2361C, #FF8A72);
+  --signal-wash:   light-dark(#FBE3DC, #2E1510);
+
+  /* Atribuição de imprensa (suspeitas/ligações): tom "fumê" próprio,
+     para nunca parecer dado oficial. */
+  --atrib:         light-dark(#716648, #B5A87F);
+  --atrib-wash:    light-dark(#EFE9D6, #1E1B12);
+
+  --focus:         light-dark(#4A4FB8, #A5A9F5);
+
+  /* ── Tipografia: escala modular 1.25, fluida ─────────────────────── */
+  --step--2: clamp(0.70rem, 0.69rem + 0.05vw, 0.74rem);
+  --step--1: clamp(0.82rem, 0.80rem + 0.10vw, 0.88rem);
+  --step-0:  clamp(1.00rem, 0.96rem + 0.20vw, 1.10rem);
+  --step-1:  clamp(1.25rem, 1.17rem + 0.40vw, 1.45rem);
+  --step-2:  clamp(1.56rem, 1.42rem + 0.70vw, 1.90rem);
+  --step-3:  clamp(1.95rem, 1.70rem + 1.20vw, 2.55rem);
+  --step-4:  clamp(2.44rem, 2.00rem + 2.00vw, 3.50rem);
+  --step-5:  clamp(3.05rem, 2.30rem + 3.40vw, 4.90rem);
+
+  --leading-tight: 1.08;
+  --leading-snug:  1.28;
+  --leading-body:  1.6;
+  --measure:       66ch;           /* largura de leitura */
+
+  /* ── Espaço: base 4px ────────────────────────────────────────────── */
+  --s-1: 0.25rem;  --s-2: 0.5rem;   --s-3: 0.75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;     --s-7: 3rem;     --s-8: 4rem;
+  --s-9: 6rem;     --s-10: 8rem;
+
+  /* ── Forma: editorial, quase reto, filete em vez de sombra ───────── */
+  --radius-0: 2px;
+  --radius-1: 6px;
+  --radius-2: 12px;
+  --radius-pill: 999px;
+  --hairline: 1px;
+  --shadow-1: 0 1px 0 light-dark(rgb(20 22 31 / 0.06), rgb(0 0 0 / 0.5));
+  --shadow-2: 0 10px 30px -12px light-dark(rgb(20 22 31 / 0.25), rgb(0 0 0 / 0.7));
+
+  /* ── Grade ───────────────────────────────────────────────────────── */
+  --container: 76rem;
+  --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --cols: 12;
+
+  /* ── Movimento ───────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.6, 0, 0.2, 1);
+  --dur-1: 120ms;
+  --dur-2: 220ms;
+  --dur-3: 420ms;
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; }
+}
+
+/* ── Utilitário de poder: define --poder / --poder-text / --poder-wash ── */
+[data-poder="legislativo"] { --poder: var(--leg); --poder-text: var(--leg-text); --poder-wash: var(--leg-wash); }
+[data-poder="executivo"]   { --poder: var(--exe); --poder-text: var(--exe-text); --poder-wash: var(--exe-wash); }
+[data-poder="judiciario"]  { --poder: var(--jud); --poder-text: var(--jud-text); --poder-wash: var(--jud-wash); }

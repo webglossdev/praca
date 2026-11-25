@@ -1,0 +1,20 @@
+[
+  {
+    "id": "cor-2026-001",
+    "data": "2026-10-05",
+    "pagina": "/pessoas/carla-mendes-mg",
+    "campo": "mandatos[0].status",
+    "alteracao": "Status exibido alterado para 'eleito_aguardando_posse' com data de posse 2027-02-01",
+    "motivo": "Evitar confusão entre parlamentar já em exercício e parlamentar eleita antes da posse de fevereiro de 2027.",
+    "fonte_url": "https://www.tse.jus.br"
+  },
+  {
+    "id": "cor-2026-002",
+    "data": "2026-10-04",
+    "pagina": "/fontes",
+    "campo": "senado.endpoint_votacao",
+    "alteracao": "Documentação atualizada para /dadosabertos/votacao.json (endpoint vigente)",
+    "motivo": "Descontinuação do endpoint legado do Senado registrada no inventário de APIs.",
+    "fonte_url": "https://legis.senado.leg.br/dadosabertos"
+  }
+]

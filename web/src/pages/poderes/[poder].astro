@@ -1,0 +1,63 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PersonCard from "../../components/PersonCard.astro";
+import { pessoas, type Poder } from "../../data/pessoas";
+import { guiaPorPoder } from "../../data/educacao";
+
+export function getStaticPaths() {
+  return (["legislativo", "executivo", "judiciario"] as const).map((poder) => ({ params: { poder } }));
+}
+
+const poder = (Astro.params.poder ?? "legislativo") as Poder;
+const guia = guiaPorPoder[poder] ?? guiaPorPoder.legislativo;
+const pessoasDoPoder = pessoas.filter((pessoa) => pessoa.mandatos[0]?.poder === poder);
+---
+<Layout title={`Poder ${guia.nome} · Praça`} description={guia.missaoConstitucional}>
+  <div class="wrap page" data-poder={guia.id}>
+    <header class="page-header">
+      <span class="eyebrow">Poder da República · {guia.corNome}</span>
+      <h1>Poder {guia.nome}</h1>
+      <p class="lede">{guia.missaoConstitucional}</p>
+      <p class="muted">{guia.quemIntegra}</p>
+    </header>
+
+    <section class="section" aria-labelledby="papel-title">
+      <div class="section-heading">
+        <h2 id="papel-title">Como funciona este Poder</h2>
+        <a href="/aprender#tres-poderes">Ver os Três Poderes e como nascem as leis →</a>
+      </div>
+      <div class="two-col">
+        <article class="card">
+          <h3>O que o {guia.nome} faz</h3>
+          <ul class="bullet-list">
+            {guia.oQueFaz.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+        <article class="card">
+          <h3>O que ele NÃO faz e como fiscalizar</h3>
+          <ul class="bullet-list">
+            {guia.oQueNaoFaz.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="muted" style="margin-top: var(--s-2)"><strong>Fiscalização cidadã:</strong> {guia.comoFiscalizar}</p>
+          <div class="source">
+            <span>FONTE · {guia.fonte.orgao}</span>
+            <span>{guia.fonte.coletado_em}</span>
+            <a href={guia.fonte.url} target="_blank" rel="noreferrer">Abrir fonte ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="pessoas-poder-title">
+      <div class="section-heading">
+        <h2 id="pessoas-poder-title">Perfis neste Poder ({pessoasDoPoder.length})</h2>
+        <a href={`/pessoas?poder=${guia.id}`}>Filtrar na lista completa →</a>
+      </div>
+      {pessoasDoPoder.length > 0 ? (
+        <div class="people-grid">{pessoasDoPoder.map((pessoa) => <PersonCard pessoa={pessoa} />)}</div>
+      ) : (
+        <p class="card">Sem dado disponível para este recorte no momento.</p>
+      )}
+    </section>
+  </div>
+</Layout>

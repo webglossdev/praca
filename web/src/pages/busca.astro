@@ -1,0 +1,167 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { pessoas } from "../data/pessoas";
+import { noticias, votacoes } from "../data/portal";
+import { canaisCidadao, glossarioTermos, situacoesCotidianas } from "../data/educacao";
+
+const itensBusca = [
+  ...pessoas.map((p) => ({
+    tipo: "Pessoa",
+    titulo: p.nome_publico,
+    subtitulo: `${p.mandatos[0]?.cargo ?? ""} ${p.mandatos[0]?.uf ?? ""} ${p.partido?.sigla ?? ""}`.trim(),
+    resumo: p.biografia?.valor ?? "Perfil público com fontes oficiais.",
+    href: `/pessoas/${p.slug}`,
+  })),
+  ...votacoes.map((v) => ({
+    tipo: "Votação",
+    titulo: v.proposicao_label ?? v.id,
+    subtitulo: `${v.casa ?? ""} · ${v.data} · ${v.resultado}`,
+    resumo: v.titulo ?? "",
+    href: `/votacoes/${v.id}`,
+  })),
+  ...noticias.map((n) => ({
+    tipo: "Notícia",
+    titulo: n.titulo,
+    subtitulo: `${n.veiculo} · ${n.publicado_em.slice(0, 10)}`,
+    resumo: n.trecho,
+    href: `/noticias/${n.id}`,
+  })),
+  ...glossarioTermos.map((g) => ({
+    tipo: "Glossário",
+    titulo: g.termo,
+    subtitulo: g.categoriaLabel,
+    resumo: `${g.emUmaFrase} ${g.explicacao}`,
+    href: `/glossario#${g.slug}`,
+  })),
+  ...canaisCidadao.map((c) => ({
+    tipo: "Guia do Cidadão",
+    titulo: c.titulo,
+    subtitulo: `${c.categoria} · ${c.orgao}`,
+    resumo: c.paraQueServe,
+    href: `/guia-do-cidadao#${c.id}`,
+  })),
+  ...situacoesCotidianas.map((s) => ({
+    tipo: "Como funciona",
+    titulo: s.pergunta,
+    subtitulo: `${s.esferaLabel} · ${s.categoria}`,
+    resumo: `${s.quemExecuta} ${s.comoCobrar} ${s.palavrasChave}`,
+    href: `/aprender#${s.id}`,
+  })),
+];
+---
+<Layout title="Busca unificada · Praça" description="Pesquise em pessoas, votações, notícias, termos do glossário e guias do cidadão.">
+  <div class="wrap page">
+    <header class="page-header">
+      <span class="eyebrow">Pesquisa global · atalho <span class="kbd">/</span></span>
+      <h1>Buscar no Praça</h1>
+      <p class="lede">Pesquisa instantânea no navegador abrangendo perfis, votações, notícias, termos políticos e canais oficiais de participação.</p>
+    </header>
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <div class="filter-pills" role="group" aria-label="Filtrar por categoria">
+          {["Todos", "Pessoa", "Votação", "Notícia", "Glossário", "Guia do Cidadão", "Como funciona"].map((cat, idx) => (
+            <button class="pill-button" type="button" data-busca-cat={cat === "Todos" ? "" : cat} aria-pressed={idx === 0 ? "true" : "false"}>{cat}</button>
+          ))}
+        </div>
+      </div>
+      <form class="search-form" action="/busca" method="get" role="search" data-busca-form>
+        <label class="sr-only" for="q">Termo de busca</label>
+        <input id="q" name="q" type="search" autocomplete="off" placeholder="Ex.: SUS, PEC, Fulana, SP, LAI, PL 1042…" />
+        <button class="button" type="submit">Pesquisar</button>
+      </form>
+    </div>
+
+    <p class="muted" style="margin-block: var(--s-4)" data-busca-count aria-live="polite">{itensBusca.length} item(ns) indexado(s).</p>
+
+    <div class="step-list" data-busca-results>
+      {itensBusca.map((item) => (
+        <a
+          class="card"
+          href={item.href}
+          data-cat={item.tipo}
+          data-search={`${item.tipo} ${item.titulo} ${item.subtitulo} ${item.resumo}`.toLocaleLowerCase("pt-BR")}
+        >
+          <span class="eyebrow">{item.tipo} · {item.subtitulo}</span>
+          <h2>{item.titulo}</h2>
+          <p class="muted">{item.resumo}</p>
+        </a>
+      ))}
+    </div>
+    <p class="card" hidden data-busca-empty>Nenhum resultado encontrado para o termo digitado.</p>
+  </div>
+</Layout>
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-busca-form]");
+  const input = document.querySelector<HTMLInputElement>("#q");
+  const catButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-busca-cat]")];
+  const cards = [...document.querySelectorAll<HTMLElement>("[data-busca-results] > a")];
+  const count = document.querySelector<HTMLElement>("[data-busca-count]");
+  const empty = document.querySelector<HTMLElement>("[data-busca-empty]");
+  let pagefindUrls = new Set<string>();
+
+  const buscarComPagefind = async (q: string) => {
+    if (!q) {
+      pagefindUrls = new Set();
+      return;
+    }
+    try {
+      const pagefindUrl = "/pagefind/pagefind.js";
+      const pagefind = await import(/* @vite-ignore */ pagefindUrl);
+      await pagefind.options?.({ language: "pt-BR" });
+      const busca = await pagefind.search(q);
+      pagefindUrls = new Set(
+        (await Promise.all(busca.results.slice(0, 50).map((resultado: { data: () => Promise<{ url: string }> }) => resultado.data())))
+          .map((resultado) => resultado.url)
+          .map((url) => url.endsWith("/") ? url : `${url}/`)
+      );
+    } catch {
+      pagefindUrls = new Set();
+    }
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  let activeCat = params.get("tipo") ?? "";
+  if (input && params.has("q")) input.value = params.get("q") ?? "";
+
+  const run = async (sync = true) => {
+    const q = (input?.value ?? "").trim().toLocaleLowerCase("pt-BR");
+    await buscarComPagefind(q);
+    let visiveis = 0;
+    for (const card of cards) {
+      const href = new URL(card.getAttribute("href") || "/", window.location.origin).pathname;
+      const encontradaPorIndice = pagefindUrls.has(href) || pagefindUrls.has(href.replace(/\/$/, ""));
+      const ok = (!activeCat || card.dataset.cat === activeCat) &&
+        (!q || (card.dataset.search ?? "").includes(q) || encontradaPorIndice);
+      card.hidden = !ok;
+      if (ok) visiveis += 1;
+    }
+    if (count) count.textContent = `${visiveis} resultado${visiveis === 1 ? "" : "s"}.`;
+    if (empty) empty.hidden = visiveis > 0;
+    if (sync) {
+      const next = new URLSearchParams();
+      if (q) next.set("q", input?.value.trim() ?? "");
+      if (activeCat) next.set("tipo", activeCat);
+      const qs = next.toString();
+      window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+    }
+  };
+
+  for (const btn of catButtons) {
+    btn.addEventListener("click", () => {
+      activeCat = btn.dataset.buscaCat ?? "";
+      for (const b of catButtons) b.setAttribute("aria-pressed", String(b === btn));
+      run(true);
+    });
+  }
+  input?.addEventListener("input", () => run(true));
+  form?.addEventListener("submit", (e) => { e.preventDefault(); run(true); });
+  window.addEventListener("popstate", () => {
+    const current = new URLSearchParams(window.location.search);
+    if (input) input.value = current.get("q") ?? "";
+    activeCat = current.get("tipo") ?? "";
+    for (const b of catButtons) b.setAttribute("aria-pressed", String((b.dataset.buscaCat ?? "") === activeCat));
+    void run(false);
+  });
+  run(false);
+</script>

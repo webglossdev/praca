@@ -8,7 +8,7 @@
 
 ## 1. Estado atual (reescrever a cada sessão; máx. ~15 linhas)
 
-- **Fase:** preparação pública concluída localmente; primeiro commit criado, remoto configurado e push bloqueado por ausência de repositório/autenticação no GitHub.
+- **Fase:** repositório público criado e Live Demo publicada no GitHub Pages; manutenção e novas fontes continuam abertas no plano.
 - **Funciona hoje:** Câmara 513 deputados e Senado 81 senadores ativos em `data/publico/pessoas.json`; 166 notícias normalizadas; `npm run check` sem diagnósticos; build público com 1.402 páginas; Pagefind indexou 1.402 páginas; Vitest 3/3 e Playwright/axe 4/4.
 - **Melhorias desta sessão:** skip link e menu móvel, estados dinâmicos com `aria-live`, filtros preservados na URL, semântica de tabela corrigida, tooltip/estado de compartilhamento tratado, partido neutro em relação aos Poderes, fontes Fraunces/Instrument Sans/JetBrains Mono instaladas como Fontsource e gerenciador Node padronizado em npm.
 - **Em andamento / pendente externo:** conexão de chaves de produção (`CGU_API_KEY`, `DATAJUD_API_KEY`), ingestão em lote de CSVs completos do TSE/Receita (~1,6 GB) em Parquet/DuckDB, revisão jurídica (`PLANO.md §7.6`) para desbloqueio de `SECOES_SENSIVEIS_ATIVAS`, validação com pesquisador externo (`§8.7`), Pagefind/Playwright/axe E2E e deploy no Cloudflare Pages + GitHub remoto.
@@ -95,6 +95,16 @@ Modelo de entrada:
 - **Verificação:** revisão de segurança não encontrou tokens, chaves privadas ou CPF completo rastreável; `test-results/` foi excluído. Próximo passo exige credencial GitHub CLI ou API para criar remoto e fazer push.
 - **Problemas e armadilhas:** GitHub CLI não estava instalado no PATH; também não havia credencial GitHub ou remote configurado. Publicação remota ainda depende de autenticação humana.
 - **Pendências geradas:** criar repositório remoto, configurar Pages, validar URL live, proteger branch principal e publicar o primeiro commit.
+
+### 2026-11-24: repositório e Live Demo publicados no GitHub
+- **Quem:** Coordenador Técnico Principal
+- **O que:** criado o repositório público `webglossdev/praca`, enviados os commits iniciais para `main` e habilitado GitHub Pages por workflow Actions.
+- **Onde:** `https://github.com/webglossdev/praca`, `.github/workflows/pages.yml`, `README.md`, `web/astro.config.mjs`.
+- **Como:** autenticação pelo credencial Git já configurado no Git Credential Manager, criação via API GitHub, push HTTPS e deploy Actions.
+- **Por quê:** disponibilizar o projeto aberto em desenvolvimento e a demonstração pública.
+- **Verificação:** workflow `Deploy to GitHub Pages` concluiu com `success`; a URL `https://webglossdev.github.io/praca/` respondeu conteúdo da home e 594 perfis em modo público. Build gerou 1.402 páginas e indexou 5.826 palavras no Pagefind.
+- **Problemas e armadilhas:** navegador local da sessão não conseguiu acessar a rede externa por política de sandbox, mas o GitHub Actions concluiu o deploy e o endpoint público foi confirmado por leitura HTTP.
+- **Pendências geradas:** proteger branch principal, configurar descrição/homepage no Settings se necessário, validar links internos no navegador com JavaScript habilitado e continuar pipeline de dados/segredos externos.
 
 ### 2026-11-24: criação local e tentativa de publicação no GitHub
 - **Quem:** Coordenador Técnico Principal
